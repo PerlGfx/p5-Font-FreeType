@@ -9,6 +9,7 @@ FT_F26Dot6  T_DOUBLE_FT26Dot6
 Font_FreeType	T_PTROBJ_SPECIAL
 Font_FreeType_Face	T_PTROBJ_SPECIAL
 Font_FreeType_Glyph	T_PTROBJ_SPECIAL
+const char * T_PV
 
 
 # Converts between Perl numbers and the FT_UInt type, which is a simple

@@ -2,9 +2,9 @@
 use strict;
 
 use Font::FreeType;
-use POSIX qw( floor ceil );
+use POSIX qw( ceil );
 
-die "Usage: $0 font-filename character/Unicode-number > glyph.eps\n"
+die "Usage: $0 font-filename character/Unicode-number > glyph.svg\n"
   unless @ARGV == 2;
 my ($filename, $char) = @ARGV;
 
@@ -21,18 +21,21 @@ die "No glyph for character '$char'.\n" unless $glyph;
 die "Glyph has no outline.\n" unless $glyph->has_outline;
 
 my ($xmin, $ymin, $xmax, $ymax) = $glyph->outline_bbox;
-$xmin = floor $xmin;  $ymin = floor $ymin;
 $xmax = ceil $xmax;  $ymax = ceil $ymax;
 
-print "%%!PS-Adobe-3.0 EPSF-3.0\n",
-      "%%Creator: $0\n",
-      "%%BoundingBox: $xmin $ymin $xmax $ymax\n",
-      "%%Pages: 1\n",
-      "%\%EndComments\n\n",
-      "%%Page: 1 1\n",
-      "gsave newpath\n",
-      $glyph->postscript,
-      "closepath fill grestore\n",
-      "%\%EOF\n";
+my $path = $glyph->svg_path;
+
+print "<?xml version='1.0' encoding='UTF-8'?>\n",
+      "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\"\n",
+      "    \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n\n",
+      "<svg xmlns='http://www.w3.org/2000/svg' version='1.0'\n",
+      "     width='$xmax' height='$ymax'>\n\n",
+      # Transformation to flip it upside down and move it back down into
+      # the viewport.
+      " <g transform='scale(1 -1) translate(0 -$ymax)'>\n",
+      "  <path d='$path'\n",
+      "        style='fill: #77FFCC; stroke: #000000'/>\n\n",
+      " </g>\n",
+      "</svg>\n";
 
 # vi:ts=4 sw=4 expandtab

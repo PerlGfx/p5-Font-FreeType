@@ -22,6 +22,7 @@ extern "C" {
 #include FT_OUTLINE_H
 #include FT_BBOX_H
 
+#undef assert
 #include <assert.h>
 
 #define QEF_BUF_SZ 256
@@ -321,7 +322,11 @@ qefft2_library_version (Font_FreeType library)
     PREINIT:
         FT_Int major, minor, patch;
     PPCODE:
+        major = minor = patch = -1;
         FT_Library_Version(library, &major, &minor, &patch);
+        assert(major != -1);
+        assert(minor != -1);
+        assert(patch != -1);
         if (GIMME_V != G_ARRAY)
             PUSHs(sv_2mortal(newSVpvf("%d.%d.%d",
                                       (int) major, (int) minor, (int) patch)));
@@ -590,25 +595,22 @@ qefft2_face_fixed_sizes (Font_FreeType_Face face)
         }
 
 
-# TODO - don't return the values I expect
-#short
-#qefft2_face_descender (Font_FreeType_Face face)
-#    CODE:
-#        /* TODO not appilcable to non-scalable ones */
-#        /* TODO - can I get this in scaled coords? */
-#        RETVAL = face->descender;
-#    OUTPUT:
-#        RETVAL
-#
-#
-#short
-#qefft2_face_ascender (Font_FreeType_Face face)
-#    CODE:
-#        /* TODO not appilcable to non-scalable ones */
-#        /* TODO - can I get this in scaled coords? */
-#        RETVAL = face->ascender;
-#    OUTPUT:
-#        RETVAL
+SV *
+qefft2_face_ascender (Font_FreeType_Face face)
+    CODE:
+        RETVAL = FT_IS_SCALABLE(face) ? ftnum_to_nv(face->size->metrics.ascender)
+                                      : &PL_sv_undef;
+    OUTPUT:
+        RETVAL
+
+
+SV *
+qefft2_face_descender (Font_FreeType_Face face)
+    CODE:
+        RETVAL = FT_IS_SCALABLE(face) ? ftnum_to_nv(face->size->metrics.descender)
+                                      : &PL_sv_undef;
+    OUTPUT:
+        RETVAL
 
 
 SV *
@@ -970,7 +972,7 @@ qefft2_glyph_outline_decompose_ (Font_FreeType_Glyph glyph, HV *args)
                "decomposing FreeType outline");
 
 
-SV *
+void
 qefft2_glyph_bitmap (Font_FreeType_Glyph glyph, UV render_mode = FT_RENDER_MODE_NORMAL)
     PREINIT:
         FT_Face face;
@@ -982,9 +984,15 @@ qefft2_glyph_bitmap (Font_FreeType_Glyph glyph, UV render_mode = FT_RENDER_MODE_
         AV *rows;
         unsigned char *row_buf;
         STRLEN len;
-    CODE:
+    PPCODE:
         face = (FT_Face) SvIV(glyph->face_sv);
-        glyph_ft = ensure_glyph_loaded(face, glyph);
+        /* XXX: For some reason I can't work out how to load the bitmap and
+         * then load the outline later, but it works the other way round.
+         * To ensure that a glyph object can be used for both, in either order,
+         * I load the outline first even if it's not needed.  There's probably
+         * a better way of doing this.  I'll ask on the mailing list.  */
+        ensure_outline_loaded(face, glyph);
+        glyph_ft = face->glyph;
         if (glyph_ft->format != FT_GLYPH_FORMAT_BITMAP) {
             errchk(FT_Render_Glyph(glyph_ft, render_mode), "rendering glyph");
         }
@@ -1026,8 +1034,9 @@ qefft2_glyph_bitmap (Font_FreeType_Glyph glyph, UV render_mode = FT_RENDER_MODE_
         }
 
         Safefree(row_buf);
-        RETVAL = newRV_inc((SV *) rows);
-    OUTPUT:
-        RETVAL
+        EXTEND(SP, 3);
+        PUSHs(sv_2mortal(newRV_inc((SV *) rows)));
+        PUSHs(sv_2mortal(newSViv(glyph_ft->bitmap_left)));
+        PUSHs(sv_2mortal(newSViv(glyph_ft->bitmap_top)));
 
 # vi:ts=4 sw=4 expandtab:

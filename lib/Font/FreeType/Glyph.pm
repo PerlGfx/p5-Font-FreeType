@@ -35,14 +35,59 @@ sub postscript
     return $fh ? $self : $ps;
 }
 
+sub svg_path
+{
+    my ($self, $fh) = @_;
+    my $s;
+    my $path = '';
+
+    $self->outline_decompose_({
+        move_to => sub {
+            $s .= "M$_[0] $_[1]\n";
+            if ($fh) { print $fh $s } else { $path .= $s }
+        },
+        line_to => sub {
+            $s = "L$_[0] $_[1]\n";
+            if ($fh) { print $fh $s } else { $path .= $s }
+        },
+        cubic_to => sub {
+            $s = "C$_[2] $_[3] $_[4] $_[5] $_[0] $_[1]\n";
+            if ($fh) { print $fh $s } else { $path .= $s }
+        },
+        conic_to => sub {
+            $s = "Q$_[2] $_[3] $_[0] $_[1]\n";
+            if ($fh) { print $fh $s } else { $path .= $s }
+        },
+    });
+
+    return $fh ? $self : $path;
+}
+
 sub bitmap_pgm
 {
     my $self = shift;
-    my $bmp = $self->bitmap(@_);
+    my ($bmp, $left, $top) = $self->bitmap(@_);
 
     my $wd = length $bmp->[0];
     my $ht = @$bmp;
-    return "P5\n$wd $ht\n255\n" . join('', @$bmp);
+    return ("P5\n$wd $ht\n255\n" . join('', @$bmp), $left, $top);
+}
+
+sub bitmap_magick
+{
+    require Image::Magick;
+
+    my $self = shift;
+    my ($bmp, $left, $top) = $self->bitmap(@_);
+
+    my $wd = length $bmp->[0];
+    my $ht = @$bmp;
+
+    my $img = Image::Magick->new(magick=>'gray', size => "${wd}x$ht",
+                                 depth => 8);
+    my $err = $img->BlobToImage(join '', @$bmp);
+    croak "error creating Image::Magick object: $err" if $err;
+    return ($img, $left, $top);
 }
 
 1;
@@ -65,7 +110,7 @@ Font::FreeType::Glyph - glyphs from font typefaces loaded from Font::FreeType
     my $glyph = $face->glyph_from_char_code(65);
 
     # Render into an array of strings, one byte per pixel.
-    my $bitmap = $glyph->bitmap;
+    my ($bitmap, $left, $top) = $glyph->bitmap;
 
     # Read vector outline.
     $glyph->outline_decompose(
@@ -121,7 +166,12 @@ If the glyph is from a bitmap font, the bitmap image is returned.  If
 it is from a vector font, then the outline is rendered into a bitmap
 at the face's current size.
 
-The value returned is a reference to an array.  Each item in the array
+Three values are returned: the bitmap itself, the number of pixels from
+the origin to where the left of the area the bitmap describes, and the
+number of pixels from the origin to the top of the area of the bitmap
+(positive being up).
+
+The bitmap value is a reference to an array.  Each item in the array
 represents a line of the bitmap, starting from the top.  Each item is
 a string of bytes, with one byte representing one pixel of the image,
 starting from the left.  A value of 0 indicates background (outside the
@@ -133,7 +183,7 @@ the C<FT_RENDER_MODE_MONO> option.
 
 The size of the bitmap can be obtained as follows:
 
-    my $bitmap = $glyph->bitmap;
+    my ($bitmap, $left, $top) = $glyph->bitmap;
     my $width = length $bitmap->[0];
     my $height = @$bitmap;
 
@@ -166,6 +216,22 @@ down the image as normal.  This mode probably won't work yet.
 
 =back
 
+=item bitmap_magick([I<render_mode>])
+
+A simple wrapper around the C<bitmap()> method.  Renders the bitmap as
+normal and returns it as an L<Image::Magick|Image::Magick> object,
+which can then be composited onto a larger bitmapped image, or manipulated
+using any of the features available in Image::Magick.
+
+The image is in the 'gray' format, with a depth of 8 bits.
+
+The left and top distances in pixels are returned as well, in the
+same way as for the C<bitmap()> method.
+
+This method, particularly the use of the left and top offsets for
+correct positioning of the bitmap, is demonstrated in the
+I<magick.pl> example program.
+
 =item bitmap_pgm([I<render_mode>])
 
 A simple wrapper around the C<bitmap()> method.  It renders the bitmap
@@ -177,6 +243,9 @@ The PGM image returned is in the 'binary' format, with one byte per
 pixel.  It is not an efficient format, but can be read by many image
 manipulation programs.  For a detailed description of the format
 see L<http://netpbm.sourceforge.net/doc/pgm.html>
+
+The left and top distances in pixels are returned as well, in the
+same way as for the C<bitmap()> method.
 
 The I<render-glyph.pl> example program uses this method.
 
@@ -276,6 +345,7 @@ track of the previous position yourself.
 =item C<conic_to>
 
 Move the pen to a new position, drawing a conic BE<eacute>zier arc
+(also known as a quadratic BE<eacute>zier curve)
 from the old position, using a single control point.
 
 If you don't supply a C<conic_to> handler, all conic curves will be
@@ -318,6 +388,21 @@ code to that file, otherwise it will return it as a string.
 The distance from the right edge of the glyph image to the place where
 the origin of the next character should be (i.e., the end of the
 advance width).  Only applies to horizontal layouts.  Usually positive.
+
+=item svg_path()
+
+Turn the outline of the glyph into a string in a format suitable
+for including in an SVG graphics file, as the C<d> attribute of
+a C<path> element.  Note that because SVG's coordinate system has
+its origin in the top left corner the outline will be upside down.
+An SVG transformation can be used to flip it.
+
+The I<glyph-to-svg.pl> example program shows how to wrap the output
+in enough XML to generate a complete SVG file, and one way of
+transforming the outline to be the right way up.
+
+If you pass a file-handle to this method then it will write the path
+string to that file, otherwise it will return it as a string.
 
 =item vertical_advance()
 

@@ -1,15 +1,13 @@
 use ExtUtils::MakeMaker;
 use File::Spec::Functions;
 
-# TODO - try to run freetype-config, and if it works, use what it tells
-# us.  Otherwise fall back to a sensible default.
-
 WriteMakefile(
     NAME            => 'Font::FreeType',
     AUTHOR          => 'Geoff Richards <qef@laxan.com>',
     VERSION_FROM    => 'lib/Font/FreeType.pm',
     LIBS            => [ '-lfreetype' ],
     INC             => '-I/usr/include/freetype2',
+    NO_META         => 1,
 );
 
 

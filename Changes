@@ -1,3 +1,21 @@
+0.02	2004-09-10	qef@laxan.com
+
+ * The methods that return bitmap images have been changed to also return
+   the left and top offsets of the bitmap from the origin of the glyph, so
+   that the images can be properly positioned within a larger picture.
+ * Added the svg_path() method and an example for generating an SVG image
+   showing a single glyph.
+ * Better checking in $ft->version().
+ * Make sure that glyph outlines can be accessed even if the first thing
+   done to a glyph is to get its bitmap.  Added tests for doing this both
+   ways round.  The solution could be better though.
+ * Added methods $face->ascender() and $face->descender().
+ * Added method $glyph->bitmap_magick() and an example program demonstrating
+   its use, as well as using ImageMagick drawing functions to render outlines.
+ * Added test for POD correctness.
+ * Provided a better META.yml file.
+ * Minor change to typemap for older Perls.
+
 0.01	2004-06-09	qef@laxan.com
 
  * Initial version.

@@ -1,4 +1,10 @@
- * Tests for decomposing outlines.
+ * Make it work with earlier versions of FreeType2.
+   At least 2.0.9 doesn't work.  For example, the FT_LOAD_NO_AUTOHINT
+   macro doesn't exist in that version.
+
+ * Tests:
+    * decomposing outlines.  Also test the postscript() and svg_path() methods.
+    * bitmap_magick() -- skip tests if Image::Magick not installed
 
  * Maybe provide some defaults for $face->set_char_size(), so that you don't
    have to pass in all four values.
@@ -34,15 +40,6 @@
 
  * Perhaps an interface for selecting charmaps.
 
- * Reconsile $face->ascender() and $face->descender() with the information
-   I'd expect to get, then uncomment them, and make them return undef for
-   non-scalable fonts.
-
- * Provide an alternative to $glyph->bitmap(), perhaps 'bitmap_magick', which
-   returns an Image Magick object.  Or similarly for other graphics libraries.
-   Should only load Image Magick when used, and the tests should skip it if
-   it isn't installed.
-
  * Check that the things passed to $glyph->outline_decompose() are actually
    code refs.
 
@@ -50,8 +47,6 @@
    to output Postscript less stupidly.
 
  * Provide convenience method for generating PDF fragments from outline.
-
- * Maybe a convenience method for returning SVG, as a XML::LibXML DOM tree?
 
  * Binding of FT_HAS_MULTIPLE_MASTERS, if I can work out what it's for.
 
@@ -82,3 +77,15 @@
    have "ENCODING -1 0".
 
  * Document set_pixel_size() properly, once I've worked it out.
+
+ * Provide a README, if I can think of anything useful to put in it.
+
+ * Do whatever is necessary to make the CPAN page display the 'License'
+   field correctly - and then do the same for Text::VimColor.
+
+ * Figure out how to make the outline available even after the bitmap was
+   first loaded, without the kludge of always loading the outline (which
+   is probably inefficient).  See the comments in qefft2_glyph_bitmap().
+
+ * In Makefile.PL try to run freetype-config, and if it works, use what it
+   tells us.  Otherwise fall back to a sensible default.

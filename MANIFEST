@@ -2,7 +2,9 @@ Changes
 examples/font-info.pl
 examples/glyph-outline.pl
 examples/glyph-to-eps.pl
+examples/glyph-to-svg.pl
 examples/list-characters.pl
+examples/magick.pl
 examples/render-glyph.pl
 FreeType.xs
 lib/Font/FreeType/Face.pm
@@ -10,12 +12,14 @@ lib/Font/FreeType/Glyph.pm
 lib/Font/FreeType.pm
 Makefile.PL
 MANIFEST
-META.yml                                 Module meta-data (added by MakeMaker)
+META.yml                                 Module meta-data
 t/05library.t
 t/10metrics_5x7bdf.t
 t/10metrics_verasans.t
 t/20bitmap.t
 t/30render.t
+t/99pod.t
+t/data/002E.300.300.72.72.1.pgm
 t/data/0041.72.72.72.72.0.pgm
 t/data/0041.72.72.72.72.1.pgm
 t/data/0041.8.8.100.100.0.pgm

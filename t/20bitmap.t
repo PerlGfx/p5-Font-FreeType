@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More tests => 3 * 3;
 use File::Spec::Functions;
 use Font::FreeType;
 
@@ -34,8 +34,10 @@ while (<$bmp_file>) {
     }
 
     my $glyph = $bdf->glyph_from_char_code(hex $unicode);
-    my $bmp = $glyph->bitmap;
-    is_deeply(\@expected, $bmp);
+    my ($bmp, $left, $top) = $glyph->bitmap;
+    is_deeply($bmp, \@expected);
+    is($left, 0, 'bitmap starts 0 pixels to left of origin');
+    is($top, 6, 'bitmap starts 6 pixels above origin');
 }
 
 # vim:ft=perl ts=4 sw=4 expandtab:

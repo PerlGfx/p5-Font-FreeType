@@ -35,6 +35,11 @@ Unless otherwise stated, all methods will die if there is an error.
 
 =over 4
 
+=item ascender()
+
+The height above the baseline of the 'top' of the font's glyphs, scaled to
+the current size of the face.
+
 =item attach_file(I<filename>)
 
 Informs FreeType of an ancillary file needed for reading the font.
@@ -45,6 +50,12 @@ Hasn't been tested yet.
 The index number of the current font face.  Usually this will be
 zero, which is the default.  See C<Font::FreeType-E<gt>face()> for how
 to load other faces from the same file.
+
+=item descender()
+
+The depth below the baseline of the 'bottom' of the font's glyphs, scaled to
+the current size of the face.  Actually represents the distance moving up
+from the baseline, so usually negative.
 
 =item family_name()
 

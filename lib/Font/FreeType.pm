@@ -2,12 +2,13 @@ package Font::FreeType;
 use warnings;
 use strict;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 require DynaLoader;
 our @ISA = qw( DynaLoader );
 
 use Font::FreeType::Glyph;
+use Carp;
 
 bootstrap Font::FreeType;
 
@@ -20,6 +21,8 @@ sub import
 sub face
 {
     my ($self, $filename, %option) = @_;
+    croak 'usage: $freetype->face($filename, %options)'
+      unless defined $self && defined $filename;
     return qefft2_face($self, $filename, $option{index} || 0,
                        $option{load_flags} || 0);
 }

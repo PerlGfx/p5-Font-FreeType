@@ -24,6 +24,7 @@ elsif ($char !~ /^\d+$/)      { $char = ord $char }
 my $glyph = $face->glyph_from_char_code($char);
 die "No glyph for character '$char'.\n" unless $glyph;
 
-print $glyph->bitmap_pgm;
+my ($pgm, $left, $top) = $glyph->bitmap_pgm;
+print $pgm;
 
 # vi:ts=4 sw=4 expandtab
