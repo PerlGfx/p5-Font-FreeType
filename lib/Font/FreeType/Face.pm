@@ -72,7 +72,7 @@ will be absent if the information isn't available:
 
 =item size
 
-Size of the glyphs in points.
+Size of the glyphs in points.  Only available with Freetype 2.1.5 or newer.
 
 =item height
 
@@ -85,10 +85,12 @@ Width of the bitmaps in pixels.
 =item x_res_dpi, y_res_dpi
 
 Resolution the bitmaps were designed for, in dots per inch.
+Only available with Freetype 2.1.5 or newer.
 
 =item x_res_ppem, y_res_ppem
 
 Resolution the bitmaps were designed for, in pixels per em.
+Only available with Freetype 2.1.5 or newer.
 
 =back
 
@@ -148,7 +150,8 @@ method below.
 =item has_reliable_glyph_names()
 
 True if the font contains reliable PostScript glyph names.  Some
-Some fonts contain bad glyph names.
+Some fonts contain bad glyph names.  This method always returns false
+when used with Freetype versions earlier than 2.1.1.
 
 See also C<has_glyph_names()> above.
 
@@ -248,10 +251,9 @@ to PostScript points.
 
 =item set_pixel_size(I<width>, I<height>)
 
-Set the size at which bitmapped fonts will be loaded.  Usually not
-necessary: by default most bitmap fonts will come out at the native
-size.  I think this is intended for selecting between embedded bitmaps
-in scalable fonts, but I'm not sure.
+Set the size at which bitmapped fonts will be loaded.  Bitmap fonts are
+automatically set to the first available standard size, so this usually
+isn't needed.
 
 =item style_name()
 

@@ -1,3 +1,23 @@
+0.03	2004-09-11	qef@laxan.com
+
+ * Now compiles with older versions of FreeType, at least back to 2.0.9.
+   There are macro #if directives to conditionalize the code on the version,
+   based on the FreeType changelogs and grepping of various versions of
+   the source, so it should work with lots of different versions now.
+   The POD documents the features that aren't available in older versions.
+ * Various changes to make it compile under Perl 5.6.1.
+ * When loading a bitmapped font, set the pixel size to the first fixed
+   size, which should usually be the right thing.  Seems to be necessary
+   on older versions of FreeType (at least 2.0.9) which don't do this
+   automatically.
+ * Added a few more tests for extracting bitmaps (including from a Windows FNT
+   format file added to the distribution), and made tests that use the BDF
+   font skip if the version of FreeType is too old to support BDF fonts.
+ * Don't export the FT_LOAD_RENDER or FT_LOAD_MONOCHROME symbols, because
+   they aren't needed.  The bitmaps are always rendered when you ask for
+   the bitmap image, and you can pass FT_RENDER_MODE_MONO to bitmap() to
+   avoid antialiasing.
+
 0.02	2004-09-10	qef@laxan.com
 
  * The methods that return bitmap images have been changed to also return

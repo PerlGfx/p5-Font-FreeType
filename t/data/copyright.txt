@@ -9,6 +9,9 @@ non-copyright terms:
 
    "Public domain font.  Share and enjoy."
 
+The file '5x7.fnt' was converted from '5x7.bdf' using 'fontforge'.  It only
+contains the glyphs up to character 255.
+
 
 The font file 'Vera.ttf' contains a sans-serif font in TrueType format from
 Bitstream, Inc.  It can be obtained freely from this webpage:

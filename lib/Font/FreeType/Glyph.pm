@@ -200,6 +200,8 @@ The default.  Uses antialiasing.
 Changes the hinting algorithm to make the glyph image closer to it's
 real shape, but probably more fuzzy.
 
+Only available with Freetype version 2.1.4 or newer.
+
 =item FT_RENDER_MODE_MONO
 
 Render with antialiasing disabled.  Each pixel will be either 0 or 255.
@@ -209,10 +211,14 @@ Render with antialiasing disabled.  Each pixel will be either 0 or 255.
 Render in colour for an LCD display, with three times as many pixels
 across the image as normal.  This mode probably won't work yet.
 
+Only available with Freetype version 2.1.3 or newer.
+
 =item FT_RENDER_MODE_LCD_V
 
 Render in colour for an LCD display, with three times as many rows
 down the image as normal.  This mode probably won't work yet.
+
+Only available with Freetype version 2.1.3 or newer.
 
 =back
 

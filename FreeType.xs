@@ -25,6 +25,35 @@ extern "C" {
 #undef assert
 #include <assert.h>
 
+/* Macro for testing whether we have at least a certain version of
+ * Freetype available.  */
+#define QEFFT2_FT_AT_LEAST(major, minor, patch) \
+    FREETYPE_MAJOR > major || \
+        (FREETYPE_MAJOR == major && \
+            (FREETYPE_MINOR > minor || \
+                (FREETYPE_MINOR == minor && FREETYPE_PATCH >= patch)))
+
+/* Define the newer names for constants in terms of the old names if we're
+ * compiling against an old version of the library.  These uppercase
+ * constants, which are defined in enums, were added in Freetype 2.1.3.  */
+#if !(QEFFT2_FT_AT_LEAST(2,1,3))
+#define FT_GLYPH_FORMAT_NONE ft_glyph_format_none
+#define FT_GLYPH_FORMAT_COMPOSITE ft_glyph_format_composite
+#define FT_GLYPH_FORMAT_BITMAP ft_glyph_format_bitmap
+#define FT_GLYPH_FORMAT_OUTLINE ft_glyph_format_outline
+#define FT_GLYPH_FORMAT_PLOTTER ft_glyph_format_plotter
+#define FT_RENDER_MODE_NORMAL ft_render_mode_normal
+#define FT_RENDER_MODE_MONO ft_render_mode_mono
+#define FT_PIXEL_MODE_NONE ft_pixel_mode_none
+#define FT_PIXEL_MODE_MONO ft_pixel_mode_mono
+#define FT_PIXEL_MODE_GRAY ft_pixel_mode_grays
+#define FT_PIXEL_MODE_GRAY2 ft_pixel_mode_pal2
+#define FT_PIXEL_MODE_GRAY4 ft_pixel_mode_pal4
+#define FT_KERNING_DEFAULT ft_kerning_default
+#define FT_KERNING_UNFITTED ft_kerning_unfitted
+#define FT_KERNING_UNSCALED ft_kerning_unscaled
+#endif
+
 #define QEF_BUF_SZ 256
 
 /* Scary macrology follows, stolen from fterrors.h
@@ -91,7 +120,6 @@ const static QefFT2_Uv_Const qefft2_uv_const[] =
     QEFFT2_CONSTANT(FT_LOAD_DEFAULT)
     QEFFT2_CONSTANT(FT_LOAD_NO_SCALE)
     QEFFT2_CONSTANT(FT_LOAD_NO_HINTING)
-    QEFFT2_CONSTANT(FT_LOAD_RENDER)
     QEFFT2_CONSTANT(FT_LOAD_NO_BITMAP)
     QEFFT2_CONSTANT(FT_LOAD_VERTICAL_LAYOUT)
     QEFFT2_CONSTANT(FT_LOAD_FORCE_AUTOHINT)
@@ -100,14 +128,19 @@ const static QefFT2_Uv_Const qefft2_uv_const[] =
     QEFFT2_CONSTANT(FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH)
     /* FT_LOAD_NO_RECURSE - for internal use only*/
     QEFFT2_CONSTANT(FT_LOAD_IGNORE_TRANSFORM)
-    QEFFT2_CONSTANT(FT_LOAD_MONOCHROME)
     QEFFT2_CONSTANT(FT_LOAD_LINEAR_DESIGN)
+#if QEFFT2_FT_AT_LEAST(2,1,3)
     QEFFT2_CONSTANT(FT_LOAD_NO_AUTOHINT)
+#endif
     QEFFT2_CONSTANT(FT_RENDER_MODE_NORMAL)
+#if QEFFT2_FT_AT_LEAST(2,1,4)
     QEFFT2_CONSTANT(FT_RENDER_MODE_LIGHT)
+#endif
     QEFFT2_CONSTANT(FT_RENDER_MODE_MONO)
+#if QEFFT2_FT_AT_LEAST(2,1,3)
     QEFFT2_CONSTANT(FT_RENDER_MODE_LCD)
     QEFFT2_CONSTANT(FT_RENDER_MODE_LCD_V)
+#endif
     QEFFT2_CONSTANT(FT_KERNING_DEFAULT)
     QEFFT2_CONSTANT(FT_KERNING_UNFITTED)
     QEFFT2_CONSTANT(FT_KERNING_UNSCALED)
@@ -343,9 +376,17 @@ qefft2_face (Font_FreeType library, const char *filename, int faceidx, FT_Int32 
     PREINIT:
         SV *library_sv;
         QefFT2_Face_Extra *extra;
+        const FT_Bitmap_Size *size;
     CODE:
         errchk(FT_New_Face(library, filename, faceidx, &RETVAL),
                "opening font face");
+        /* Set a default pixel size if one is known, to avoid confusing
+         * errors if the user forgets.  */
+        if (RETVAL->num_fixed_sizes) {
+            size = &RETVAL->available_sizes[0];
+            errchk(FT_Set_Pixel_Sizes(RETVAL, size->width, size->height),
+                   "setting default pixel size of freetype face");
+        }
         library_sv = SvRV(ST(0));
         SvREFCNT_inc(library_sv);
         New(0, extra, 1, QefFT2_Face_Extra);
@@ -482,7 +523,12 @@ qefft2_face_has_glyph_names (Font_FreeType_Face face)
 bool
 qefft2_face_has_reliable_glyph_names (Font_FreeType_Face face)
     CODE:
+        /* The FT_Has_PS_Glyph_Names function was added in version 2.1.1.  */
+#if QEFFT2_FT_AT_LEAST(2,1,1)
         RETVAL = FT_HAS_GLYPH_NAMES(face) && FT_Has_PS_Glyph_Names(face);
+#else
+        RETVAL = 0;
+#endif
     OUTPUT:
         RETVAL
 
@@ -572,6 +618,9 @@ qefft2_face_fixed_sizes (Font_FreeType_Face face)
                     hv_store(hash, "height", 6, newSVuv(size->height), 0);
                 if (size->width)
                     hv_store(hash, "width", 5, newSVuv(size->width), 0);
+                /* The 'size', 'x_ppem', and 'y_ppem' fields were only added
+                 * to the FT_Bitmap_Size structure in version 2.1.5.  */
+#if QEFFT2_FT_AT_LEAST(2,1,5)
                 if (size->size) {
                     pt = size->size / 64.0;
                     hv_store(hash, "size", 4, newSVnv(pt), 0);
@@ -590,6 +639,7 @@ qefft2_face_fixed_sizes (Font_FreeType_Face face)
                         hv_store(hash, "y_res_dpi", 9,
                                  newSVnv((72 * ppem) / pt), 0);
                 }
+#endif
                 PUSHs(sv_2mortal(newRV_inc((SV *) hash)));
             }
         }

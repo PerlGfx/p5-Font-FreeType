@@ -32,7 +32,7 @@ push @properties, 'Horizontal' if $face->has_horizontal_metrics;
 push @properties, 'Vertical' if $face->has_vertical_metrics;
 print join('  ', @properties), "\n" if @properties;
 
-print "Units per em: ", $face->units_per_em, "\n";
+print "Units per em: ", $face->units_per_em, "\n" if $face->units_per_em;
 print "Number of glyphs: ", $face->number_of_glyphs, "\n";
 print "Number of faces: ", $face->number_of_faces, "\n"
   if $face->number_of_faces > 1;

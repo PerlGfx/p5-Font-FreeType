@@ -23,9 +23,11 @@ t/data/002E.300.300.72.72.1.pgm
 t/data/0041.72.72.72.72.0.pgm
 t/data/0041.72.72.72.72.1.pgm
 t/data/0041.8.8.100.100.0.pgm
+t/data/0041.8.8.100.100.0.pgm.2
 t/data/0041.8.8.100.100.1.pgm
 t/data/0041.8.8.600.600.0.pgm
 t/data/5x7.bdf
+t/data/5x7.fnt
 t/data/bdf_bitmaps.txt
 t/data/copyright.txt
 t/data/vera_glyphs.txt

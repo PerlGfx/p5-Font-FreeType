@@ -2,7 +2,7 @@ package Font::FreeType;
 use warnings;
 use strict;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 require DynaLoader;
 our @ISA = qw( DynaLoader );
@@ -163,17 +163,14 @@ transformations.
 
 Don't scale the metrics.
 
-=item FT_LOAD_MONOCHROME
-
-When automatically rendering (if C<FT_LOAD_RENDER> is turned on) do
-so with one bit per pixel (no antialiasing).
-
 =item FT_LOAD_NO_AUTOHINT
 
 Don't use the FreeType autohinting algorithm.  Hinting with other
 algorithms (such as the TrueType one) will still be done if possible.
 Apparently some fonts look worse with the autohinter than without
 any hinting.
+
+This option is only available with FreeType 2.1.3 or newer.
 
 =item FT_LOAD_NO_BITMAP
 
@@ -200,11 +197,6 @@ will currently generate bad numbers.  To be fixed in a later version.
 
 Raise errors when a font file is broken, rather than trying to work
 around it.
-
-=item FT_LOAD_RENDER
-
-Automatically renders the glyph as it is loaded.  The current version
-of this module will always rerender it anyway, so don't set this option.
 
 =item FT_LOAD_VERTICAL_LAYOUT
 

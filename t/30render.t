@@ -53,7 +53,17 @@ foreach (@test) {
     }
     else {
         my $expected = do { local $/; <$bmp_file> };
-        is($pgm, $expected, "PGM of character matches $test_filename");
+        # There might be a second bitmap with an alternative version in,
+        # to account for changes in the rendering algorithm.
+        my $expected2;
+        my $second_ver = "$test_filename.2";
+        if (-f $second_ver) {
+            open $bmp_file, '<', $second_ver
+              or die "error opening test bitmap data file '$second_ver': $!";
+            $expected2 = do { local $/; <$bmp_file> };
+        }
+        ok($pgm eq $expected || (defined $expected2 && $pgm eq $expected2),
+           "PGM of character matches $test_filename or perhaps alternate");
         is($left, $_->{left}, "left offset matches for $test_filename");
         is($top, $_->{top}, "top offset matches for $test_filename");
     }

@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: Font-FreeType
-version: 0.02
+version: 0.03
 license: perl
 distribution_type: module
 recommends:

@@ -10,6 +10,7 @@ Font_FreeType	T_PTROBJ_SPECIAL
 Font_FreeType_Face	T_PTROBJ_SPECIAL
 Font_FreeType_Glyph	T_PTROBJ_SPECIAL
 const char * T_PV
+HV *			T_HVREF
 
 
 # Converts between Perl numbers and the FT_UInt type, which is a simple
@@ -82,5 +83,15 @@ T_PTROBJ_SPECIAL
 OUTPUT
 T_PTROBJ_SPECIAL
     sv_setref_pv($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\", (void*)$var);
+
+
+# Needed for compatability with Perl 5.6.1.  This is the version out
+# of the 5.8.4 typemap, because the standard 5.6 one doesn't work.
+INPUT
+T_HVREF
+	if (SvROK($arg) && SvTYPE(SvRV($arg))==SVt_PVHV)
+	    $var = (HV*)SvRV($arg);
+	else
+	    Perl_croak(aTHX_ \"$var is not a hash reference\")
 
 # vi:ts=4 sw=4 expandtab

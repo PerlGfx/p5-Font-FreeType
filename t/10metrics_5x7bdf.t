@@ -2,14 +2,23 @@
 
 use strict;
 use warnings;
-use Test::More tests => 71 + 4 * 2 + 1836 * 1;
 use File::Spec::Functions;
 use Font::FreeType;
+
+my $ft;
+my $skip_all;
+BEGIN {
+    $ft = Font::FreeType->new;
+    $skip_all = $ft->version lt '2.1.1';
+}
+use Test::More ($skip_all ?
+    (skip_all => 'BDF not supported until FreeType 2.1.1') :
+    (tests => 71 + 4 * 2 + 1836 * 1));
+exit 0 if $skip_all;
 
 my $data_dir = catdir(qw( t data ));
 
 # Load the BDF file.
-my $ft = Font::FreeType->new;
 my $bdf = $ft->face(catfile($data_dir, '5x7.bdf'));
 ok($bdf, 'FreeType->face() should return an object');
 is(ref $bdf, 'Font::FreeType::Face',
