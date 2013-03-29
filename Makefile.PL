@@ -5,8 +5,8 @@ WriteMakefile(
     NAME            => 'Font::FreeType',
     AUTHOR          => 'Geoff Richards <qef@laxan.com>',
     VERSION_FROM    => 'lib/Font/FreeType.pm',
-    LIBS            => [ '-lfreetype' ],
-    INC             => '-I/usr/include/freetype2',
+    LIBS            => [ `pkg-config --libs freetype2` ],
+    INC             => `pkg-config --cflags freetype2`,
     NO_META         => 1,
 );
 
