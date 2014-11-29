@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 72 + 5 * 2 + 256 * 2;
+use Test::More tests => 75 + 5 * 2 + 256 * 2;
 use File::Spec::Functions;
 use Font::FreeType;
 
@@ -62,9 +62,9 @@ is($vera->units_per_em, 2048, '$face->units_per_em() is right');
 is($vera->underline_position, -284, 'underline position');
 is($vera->underline_thickness, 143, 'underline thickness');
 # italic angle 0
-#is($vera->ascender, 1556, 'ascender');
-#is($vera->descender, 492, 'descender');
-
+is($vera->ascender, 1901, 'ascender');
+is($vera->descender, -483, 'descender');
+is($vera->height, 2384, 'height');
 
 # Test getting the set of fixed sizes available.
 my @fixed_sizes = $vera->fixed_sizes;

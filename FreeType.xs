@@ -73,9 +73,7 @@ typedef struct QefFT2_Errstr_ QefFT2_Errstr;
 QefFT2_Errstr qefft2_errstr[] = /* rest filled in by the header */
 #include FT_ERRORS_H
 
-
-#define ftnum_to_nv(num) newSVnv((double) (num) / 64.0)
-
+#define ftnum_to_nv(num) newSVnv((double) (num) / 1.0)
 
 struct QefFT2_Glyph_
 {
@@ -585,7 +583,7 @@ qefft2_face_set_pixel_size (Font_FreeType_Face face, FT_UInt width, FT_UInt heig
 SV *
 qefft2_face_height (Font_FreeType_Face face)
     CODE:
-        RETVAL = FT_IS_SCALABLE(face) ? ftnum_to_nv(face->size->metrics.height)
+        RETVAL = FT_IS_SCALABLE(face) ? newSViv(face->height)
                                       : &PL_sv_undef;
     OUTPUT:
         RETVAL
@@ -641,7 +639,7 @@ qefft2_face_fixed_sizes (Font_FreeType_Face face)
 SV *
 qefft2_face_ascender (Font_FreeType_Face face)
     CODE:
-        RETVAL = FT_IS_SCALABLE(face) ? ftnum_to_nv(face->size->metrics.ascender)
+        RETVAL = FT_IS_SCALABLE(face) ? newSViv(face->ascender)
                                       : &PL_sv_undef;
     OUTPUT:
         RETVAL
@@ -650,7 +648,7 @@ qefft2_face_ascender (Font_FreeType_Face face)
 SV *
 qefft2_face_descender (Font_FreeType_Face face)
     CODE:
-        RETVAL = FT_IS_SCALABLE(face) ? ftnum_to_nv(face->size->metrics.descender)
+        RETVAL = FT_IS_SCALABLE(face) ? newSViv(face->descender)
                                       : &PL_sv_undef;
     OUTPUT:
         RETVAL
