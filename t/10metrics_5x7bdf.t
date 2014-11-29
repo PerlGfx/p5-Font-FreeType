@@ -60,7 +60,7 @@ foreach my $method (sort keys %expected_flags) {
 }
 
 # Some other general properties.
-is($bdf->number_of_glyphs, 1836, '$face->number_of_glyphs() is right');
+is($bdf->number_of_glyphs, 1837, '$face->number_of_glyphs() is right');
 is($bdf->units_per_em, undef, 'units_per_em() meaningless');
 is($bdf->underline_position, undef, 'underline position meaningless');
 is($bdf->underline_thickness, undef, 'underline thickness meaningless');
@@ -75,8 +75,8 @@ is($fixed_size->{width}, 5, 'fixed size width');
 is($fixed_size->{height}, 7, 'fixed size width');
 ok(abs($fixed_size->{size} - (70 / 722.7 * 72)) < 0.1,
    "fixed size is 70 printer's decipoints");
-ok(abs($fixed_size->{x_res_dpi} - 75) < 0.1, 'fixed size x resolution 75dpi');
-ok(abs($fixed_size->{y_res_dpi} - 75) < 0.1, 'fixed size y resolution 75dpi');
+ok(abs($fixed_size->{x_res_dpi} - 72) < 1, 'fixed size x resolution 72dpi');
+ok(abs($fixed_size->{y_res_dpi} - 72) < 1, 'fixed size y resolution 72dpi');
 ok(abs($fixed_size->{size} * $fixed_size->{x_res_dpi} / 72
        - $fixed_size->{x_res_ppem}) < 0.1, 'fixed size x resolution in ppem');
 ok(abs($fixed_size->{size} * $fixed_size->{y_res_dpi} / 72
