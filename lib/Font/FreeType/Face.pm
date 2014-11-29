@@ -157,8 +157,8 @@ See also C<has_glyph_names()> above.
 
 =item height()
 
-The height of the text.  Not entirely sure what that corresponds
-to (is it the line height or what?).
+The line height of the text, i.e. distance between baselines of two
+lines of text.
 
 =item is_bold()
 
