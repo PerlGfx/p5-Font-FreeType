@@ -380,13 +380,6 @@ qefft2_face (Font_FreeType library, const char *filename, int faceidx, FT_Int32 
     CODE:
         errchk(FT_New_Face(library, filename, faceidx, &RETVAL),
                "opening font face");
-        /* Set a default pixel size if one is known, to avoid confusing
-         * errors if the user forgets.  */
-        if (RETVAL->num_fixed_sizes) {
-            size = &RETVAL->available_sizes[0];
-            errchk(FT_Set_Pixel_Sizes(RETVAL, size->width, size->height),
-                   "setting default pixel size of freetype face");
-        }
         library_sv = SvRV(ST(0));
         SvREFCNT_inc(library_sv);
         New(0, extra, 1, QefFT2_Face_Extra);
