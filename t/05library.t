@@ -3,7 +3,8 @@
 
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More tests => 5;
+use Test::Warnings;
 use Font::FreeType;
 
 # Make an object.
@@ -16,5 +17,8 @@ my $version = $ft->version;
 ok($version =~ /^\d+\.\d+\.\d+\z/, 'version number should be formated right');
 is(join('.', $ft->version), $version,
    'version() in list context should return same nums as in scalar context');
+
+eval 'use Font::FreeType'; # should not emit redefinition warnings
+ok !$@, 'successfully re-imported Font::FreeType';
 
 # vim:ft=perl ts=4 sw=4 expandtab:

@@ -327,9 +327,11 @@ qefft2_import (const char *target_pkg)
         stash = gv_stashpv(target_pkg, 0);
         if (!stash)
             croak("the package I'm importing into doesn't seem to exist");
-        for (i = 0; i < sizeof(qefft2_uv_const) / sizeof(QefFT2_Uv_Const); ++i)
-            newCONSTSUB(stash, qefft2_uv_const[i].name,
-                        newSVuv(qefft2_uv_const[i].value));
+        for (i = 0; i < sizeof(qefft2_uv_const) / sizeof(QefFT2_Uv_Const); ++i) {
+            const char* name = qefft2_uv_const[i].name;
+            if ( !hv_exists(stash, name, strlen(name)) )
+                 newCONSTSUB(stash, name,  newSVuv(qefft2_uv_const[i].value));
+        }
 
 
 Font_FreeType
