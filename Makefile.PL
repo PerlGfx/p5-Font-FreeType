@@ -1,15 +1,29 @@
+use Devel::CheckLib;
 use ExtUtils::MakeMaker;
 use File::Spec::Functions;
 
-WriteMakefile(
-    NAME            => 'Font::FreeType',
-    AUTHOR          => 'Geoff Richards <qef@laxan.com>',
-    VERSION_FROM    => 'lib/Font/FreeType.pm',
-    LIBS            => [ `pkg-config --libs freetype2` ],
-    INC             => `pkg-config --cflags freetype2`,
-    NO_META         => 1,
+my $inc = '-I/usr/include/freetype2';
+my $lib = 'freetype';
+
+check_lib_or_exit(
+    lib    => $lib,
+    INC    => $inc,
+    header => 'ft2build.h',
 );
 
+WriteMakefile(
+    NAME               => 'Font::FreeType',
+    AUTHOR             => 'Geoff Richards <qef@laxan.com>',
+    VERSION_FROM       => 'lib/Font/FreeType.pm',
+    CONFIGURE_REQUIRES => {
+        "Devel::CheckLib" => "0"
+    },
+    TEST_REQUIRES      => {
+        Test::Warnings => 0,
+    },
+    LIBS               => "-l${lib}",
+    INC                => $inc,
+);
 
 # Generate a listing of the characters in the BDF test font, for checking
 # that the library can find them all.  See t/10metrics_5x7bdf.t
