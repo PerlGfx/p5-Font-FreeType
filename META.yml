@@ -4,6 +4,7 @@ author:
   - 'Geoff Richards <qef@laxan.com>'
 build_requires:
   ExtUtils::MakeMaker: '0'
+  Test::Warnings: '0'
 configure_requires:
   Devel::CheckLib: '0'
 dynamic_config: 1
@@ -18,4 +19,4 @@ no_index:
     - t
     - inc
 requires: {}
-version: '0.03'
+version: 0.04_01
