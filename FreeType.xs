@@ -102,6 +102,7 @@ struct QefFT2_Outline_Decompose_Extra_
 
 typedef FT_Library Font_FreeType;
 typedef FT_Face Font_FreeType_Face;
+typedef FT_CharMap Font_FreeType_CharMap;
 typedef struct QefFT2_Glyph_ * Font_FreeType_Glyph;
 
 
@@ -142,8 +143,27 @@ const static QefFT2_Uv_Const qefft2_uv_const[] =
     QEFFT2_CONSTANT(FT_KERNING_DEFAULT)
     QEFFT2_CONSTANT(FT_KERNING_UNFITTED)
     QEFFT2_CONSTANT(FT_KERNING_UNSCALED)
-};
 
+    QEFFT2_CONSTANT(FT_ENCODING_NONE)
+    QEFFT2_CONSTANT(FT_ENCODING_UNICODE)
+    QEFFT2_CONSTANT(FT_ENCODING_MS_SYMBOL)
+    QEFFT2_CONSTANT(FT_ENCODING_SJIS)
+    QEFFT2_CONSTANT(FT_ENCODING_GB2312)
+    QEFFT2_CONSTANT(FT_ENCODING_BIG5)
+    QEFFT2_CONSTANT(FT_ENCODING_WANSUNG)
+    QEFFT2_CONSTANT(FT_ENCODING_JOHAB)
+    QEFFT2_CONSTANT(FT_ENCODING_ADOBE_LATIN_1)
+    QEFFT2_CONSTANT(FT_ENCODING_ADOBE_STANDARD)
+    QEFFT2_CONSTANT(FT_ENCODING_ADOBE_EXPERT)
+    QEFFT2_CONSTANT(FT_ENCODING_ADOBE_CUSTOM)
+    QEFFT2_CONSTANT(FT_ENCODING_APPLE_ROMAN)
+    QEFFT2_CONSTANT(FT_ENCODING_OLD_LATIN_2)
+    QEFFT2_CONSTANT(FT_ENCODING_MS_SJIS)
+    QEFFT2_CONSTANT(FT_ENCODING_MS_GB2312)
+    QEFFT2_CONSTANT(FT_ENCODING_MS_BIG5)
+    QEFFT2_CONSTANT(FT_ENCODING_MS_WANSUNG)
+    QEFFT2_CONSTANT(FT_ENCODING_MS_JOHAB)
+};
 
 static void
 errchk (FT_Error err, const char *desc)
@@ -310,8 +330,6 @@ handle_cubic_to (const FT_Vector *control1, const FT_Vector *control2, const FT_
     extra->cury = y;
     return 0;
 }
-
-
 
 MODULE = Font::FreeType   PACKAGE = Font::FreeType   PREFIX = qefft2_library_
 
@@ -672,6 +690,32 @@ qefft2_face_underline_thickness (Font_FreeType_Face face)
         /* TODO - can I get this in scaled coords? */
         RETVAL = FT_IS_SCALABLE(face) ? newSViv(face->underline_thickness)
                                       : &PL_sv_undef;
+    OUTPUT:
+        RETVAL
+
+
+Font_FreeType_CharMap
+qefft2_face_charmap (Font_FreeType_Face face)
+    CODE:
+        RETVAL = face->charmap;
+    OUTPUT:
+        RETVAL
+
+AV *
+qefft2_face_charmaps (Font_FreeType_Face face)
+    PREINIT:
+        AV* array;
+        int i;
+        Font_FreeType_CharMap* ptr;
+    CODE:
+        array = newAV();
+        ptr = face->charmaps;
+        for(i = 0; i < face->num_charmaps; i++) {
+            SV *sv = newSV(0);
+            sv_setref_pv(sv, "Font::FreeType::CharMap", (void *) *ptr++);
+            av_push(array, sv);
+        }
+        RETVAL = array;
     OUTPUT:
         RETVAL
 
@@ -1082,5 +1126,29 @@ qefft2_glyph_bitmap (Font_FreeType_Glyph glyph, UV render_mode = FT_RENDER_MODE_
         PUSHs(sv_2mortal(newRV_inc((SV *) rows)));
         PUSHs(sv_2mortal(newSViv(glyph_ft->bitmap_left)));
         PUSHs(sv_2mortal(newSViv(glyph_ft->bitmap_top)));
+
+
+MODULE = Font::FreeType   PACKAGE = Font::FreeType::CharMap   PREFIX = qefft2_charmap_
+
+FT_Encoding
+qefft2_charmap_encoding (Font_FreeType_CharMap charmap)
+    CODE:
+        RETVAL = charmap->encoding;
+    OUTPUT:
+        RETVAL
+
+FT_UShort
+qefft2_charmap_platform_id (Font_FreeType_CharMap charmap)
+    CODE:
+        RETVAL = charmap->platform_id;
+    OUTPUT:
+        RETVAL
+
+FT_UShort
+qefft2_charmap_encoding_id (Font_FreeType_CharMap charmap)
+    CODE:
+        RETVAL = charmap->encoding_id;
+    OUTPUT:
+        RETVAL
 
 # vi:ts=4 sw=4 expandtab:

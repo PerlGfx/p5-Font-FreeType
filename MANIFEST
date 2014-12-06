@@ -8,6 +8,7 @@ examples/magick.pl
 examples/render-glyph.pl
 FreeType.xs
 lib/Font/FreeType.pm
+lib/Font/FreeType/CharMap.pm
 lib/Font/FreeType/Face.pm
 lib/Font/FreeType/Glyph.pm
 Makefile.PL

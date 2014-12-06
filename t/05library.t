@@ -6,6 +6,7 @@ use warnings;
 use Test::More tests => 5;
 use Test::Warnings;
 use Font::FreeType;
+use Font::FreeType::CharMap;
 
 # Make an object.
 my $ft = Font::FreeType->new;

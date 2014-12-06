@@ -275,12 +275,21 @@ be used to scale font-specific measurements to the right size, although
 that's usually done for you by FreeType.  Usually this is 2048 for
 TrueType fonts.
 
+=item charmap()
+
+The current active L<charmap|Font::FreeType::CharMap> for this face.
+
+=item charmaps()
+
+An array of the L<charmaps|Font::FreeType::CharMap> of the face.
+
 =back
 
 =head1 SEE ALSO
 
 L<Font::FreeType|Font::FreeType>,
 L<Font::FreeType::Glyph|Font::FreeType::Glyph>
+L<Font::FreeType::CharMap>
 
 =head1 AUTHOR
 
