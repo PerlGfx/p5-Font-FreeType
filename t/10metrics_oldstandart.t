@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 24;
+use Test::More tests => 26;
 use File::Spec::Functions;
 use Font::FreeType;
 
@@ -60,3 +60,31 @@ is($font->height, 1482, 'text height');
 is($font->ascender, 952, 'ascender');
 is($font->descender, -294, 'descender');
 
+subtest "charmaps" => sub {
+    subtest "default charmap" => sub {
+        my $default_cm = $font->charmap;
+        ok $default_cm;
+        is $default_cm->platform_id, 3;
+        is $default_cm->encoding_id, 10;
+        is $default_cm->encoding, FT_ENCODING_UNICODE;
+    };
+
+    subtest "available charmaps" => sub {
+        my $charmaps = $font->charmaps;
+        ok $charmaps;
+        is ref($charmaps), 'ARRAY';
+        is scalar(@$charmaps), 6;
+    }
+};
+
+subtest "named infos" => sub {
+    my $infos = $font->namedinfos;
+    ok $infos;
+    is scalar(@$infos), 64;
+    my $copy_info = $infos->[0];
+    like $copy_info->string, qr/Copyright.*Alexey Kryukov/;
+    is $copy_info->language_id, 0;
+    is $copy_info->platform_id, 1;
+    is $copy_info->name_id, 0;
+    is $copy_info->encoding_id, 0;
+};

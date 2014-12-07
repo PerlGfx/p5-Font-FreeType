@@ -13,7 +13,7 @@ BEGIN {
 }
 use Test::More ($skip_all ?
     (skip_all => 'BDF not supported until FreeType 2.1.1') :
-    (tests => 71 + 4 * 2 + 1836 * 1));
+    (tests => 73 + 4 * 2 + 1836 * 1));
 exit 0 if $skip_all;
 
 my $data_dir = catdir(qw( t data ));
@@ -82,6 +82,7 @@ ok(abs($fixed_size->{size} * $fixed_size->{x_res_dpi} / 72
 ok(abs($fixed_size->{size} * $fixed_size->{y_res_dpi} / 72
        - $fixed_size->{y_res_ppem}) < 0.1, 'fixed size y resolution in ppem');
 
+is $bdf->namedinfos, undef, "no named infos for fixed size font";
 
 # Test iterating over all the characters.  1836*1 tests.
 my $glyph_list_filename = catfile($data_dir, 'bdf_glyphs.txt');
@@ -102,6 +103,22 @@ $bdf->foreach_char(sub {
 });
 is(scalar <$glyph_list>, undef, "we aren't missing any glyphs");
 
+subtest "charmaps" => sub {
+    subtest "default charmap" => sub {
+        my $default_cm = $bdf->charmap;
+        ok $default_cm;
+        is $default_cm->platform_id, 3;
+        is $default_cm->encoding_id, 1;
+        is $default_cm->encoding, FT_ENCODING_UNICODE;
+    };
+
+    subtest "available charmaps" => sub {
+        my $charmaps = $bdf->charmaps;
+        ok $charmaps;
+        is ref($charmaps), 'ARRAY';
+        is scalar(@$charmaps), 1;
+    }
+};
 
 # Test metrics on some particlar glyphs.
 my %glyph_metrics = (

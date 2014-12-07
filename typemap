@@ -2,13 +2,17 @@
 # mapped to blessed references.
 
 TYPEMAP
-FT_UInt  T_INT_FTUINT
+FT_UShort T_INT_FTUINT
+FT_UInt   T_INT_FTUINT
 FT_Int32  T_INT_FTINT32
 FT_ULong  T_INT_FTULONG
+FT_Encoding T_INT_FTULONG
 FT_F26Dot6  T_DOUBLE_FT26Dot6
 Font_FreeType	T_PTROBJ_SPECIAL
 Font_FreeType_Face	T_PTROBJ_SPECIAL
 Font_FreeType_Glyph	T_PTROBJ_SPECIAL
+Font_FreeType_CharMap   T_PTROBJ_SPECIAL
+Font_FreeType_NamedInfo T_PTROBJ_SPECIAL
 const char * T_PV
 HV *			T_HVREF
 
