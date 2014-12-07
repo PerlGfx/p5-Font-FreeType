@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 25;
+use Test::More tests => 26;
 use File::Spec::Functions;
 use Font::FreeType;
 
@@ -75,4 +75,16 @@ subtest "charmaps" => sub {
         is ref($charmaps), 'ARRAY';
         is scalar(@$charmaps), 6;
     }
+};
+
+subtest "named infos" => sub {
+    my $infos = $font->namedinfos;
+    ok $infos;
+    is scalar(@$infos), 64;
+    my $copy_info = $infos->[0];
+    like $copy_info->string, qr/Copyright.*Alexey Kryukov/;
+    is $copy_info->language_id, 0;
+    is $copy_info->platform_id, 1;
+    is $copy_info->name_id, 0;
+    is $copy_info->encoding_id, 0;
 };

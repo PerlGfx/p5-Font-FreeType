@@ -17,6 +17,7 @@ extern "C" {
 #endif
 
 #include <ft2build.h>
+#include <ftsnames.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 #include FT_OUTLINE_H
@@ -103,6 +104,7 @@ struct QefFT2_Outline_Decompose_Extra_
 typedef FT_Library Font_FreeType;
 typedef FT_Face Font_FreeType_Face;
 typedef FT_CharMap Font_FreeType_CharMap;
+typedef FT_SfntName* Font_FreeType_NamedInfo;
 typedef struct QefFT2_Glyph_ * Font_FreeType_Glyph;
 
 
@@ -720,6 +722,31 @@ qefft2_face_charmaps (Font_FreeType_Face face)
         RETVAL
 
 
+AV*
+qefft2_face_namedinfos (Font_FreeType_Face face)
+    PREINIT:
+        AV* array;
+        int i;
+    CODE:
+        if (!FT_IS_SCALABLE(face)) {
+            XSRETURN_UNDEF;
+        } else {
+            array = newAV();
+            int count = FT_Get_Sfnt_Name_Count(face);
+            for(i = 0; i < count; i++) {
+                SV *sv = newSV(0);
+                FT_SfntName* sfnt;
+                New(0, sfnt, 1, FT_SfntName);
+                errchk(FT_Get_Sfnt_Name(face, i, sfnt),
+                       "loading sfnt structure");
+                sv_setref_pv(sv, "Font::FreeType::NamedInfo", (void *) sfnt);
+                av_push(array, sv);
+            }
+            RETVAL = array;
+        }
+    OUTPUT:
+        RETVAL
+
 void
 qefft2_face_kerning (Font_FreeType_Face face, FT_UInt left_glyph_idx, FT_UInt right_glyph_idx, UV kern_mode = FT_KERNING_DEFAULT)
     PREINIT:
@@ -1148,6 +1175,48 @@ FT_UShort
 qefft2_charmap_encoding_id (Font_FreeType_CharMap charmap)
     CODE:
         RETVAL = charmap->encoding_id;
+    OUTPUT:
+        RETVAL
+
+MODULE = Font::FreeType   PACKAGE = Font::FreeType::NamedInfo   PREFIX = qefft2_named_info_
+
+void
+qefft2_named_info_DESTROY (Font_FreeType_NamedInfo info)
+    CODE:
+        Safefree(info);
+
+FT_UShort
+qefft2_named_info_platform_id (Font_FreeType_NamedInfo info)
+    CODE:
+        RETVAL = info->platform_id;
+    OUTPUT:
+        RETVAL
+
+FT_UShort
+qefft2_named_info_encoding_id (Font_FreeType_NamedInfo info)
+    CODE:
+        RETVAL = info->encoding_id;
+    OUTPUT:
+        RETVAL
+
+FT_UShort
+qefft2_named_info_language_id (Font_FreeType_NamedInfo info)
+    CODE:
+        RETVAL = info->language_id;
+    OUTPUT:
+        RETVAL
+
+FT_UShort
+qefft2_named_info_name_id (Font_FreeType_NamedInfo info)
+    CODE:
+        RETVAL = info->name_id;
+    OUTPUT:
+        RETVAL
+
+SV*
+qefft2_named_info_string (Font_FreeType_NamedInfo info)
+    CODE:
+        RETVAL = newSVpvn(info->string, info->string_len);
     OUTPUT:
         RETVAL
 

@@ -12,6 +12,7 @@ Font_FreeType	T_PTROBJ_SPECIAL
 Font_FreeType_Face	T_PTROBJ_SPECIAL
 Font_FreeType_Glyph	T_PTROBJ_SPECIAL
 Font_FreeType_CharMap   T_PTROBJ_SPECIAL
+Font_FreeType_NamedInfo T_PTROBJ_SPECIAL
 const char * T_PV
 HV *			T_HVREF
 
