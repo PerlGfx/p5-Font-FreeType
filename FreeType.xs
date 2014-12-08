@@ -183,7 +183,7 @@ errchk (FT_Error err, const char *desc)
         ++errmap;
     }
 
-    croak("error %s: unkown error code", desc);
+    croak("error %s: unknown error code", desc);
 }
 
 static SV *
