@@ -17,7 +17,7 @@ extern "C" {
 #endif
 
 #include <ft2build.h>
-#include <ftsnames.h>
+#include FT_SFNT_NAMES_H
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 #include FT_OUTLINE_H
@@ -183,7 +183,7 @@ errchk (FT_Error err, const char *desc)
         ++errmap;
     }
 
-    croak("error %s: unkown error code", desc);
+    croak("error %s: unknown error code", desc);
 }
 
 static SV *
