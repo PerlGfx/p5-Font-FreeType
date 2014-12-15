@@ -104,6 +104,7 @@ struct QefFT2_Outline_Decompose_Extra_
 typedef FT_Library Font_FreeType;
 typedef FT_Face Font_FreeType_Face;
 typedef FT_CharMap Font_FreeType_CharMap;
+typedef FT_BBox* Font_FreeType_BoundingBox;
 typedef FT_SfntName* Font_FreeType_NamedInfo;
 typedef struct QefFT2_Glyph_ * Font_FreeType_Glyph;
 
@@ -721,6 +722,16 @@ qefft2_face_charmaps (Font_FreeType_Face face)
     OUTPUT:
         RETVAL
 
+Font_FreeType_BoundingBox
+qefft2_face_bounding_box (Font_FreeType_Face face)
+    CODE:
+        if (!FT_IS_SCALABLE(face)) {
+            XSRETURN_UNDEF;
+        } else {
+            RETVAL = &face->bbox;
+        }
+    OUTPUT:
+        RETVAL
 
 AV*
 qefft2_face_namedinfos (Font_FreeType_Face face)
@@ -1217,6 +1228,36 @@ SV*
 qefft2_named_info_string (Font_FreeType_NamedInfo info)
     CODE:
         RETVAL = newSVpvn(info->string, info->string_len);
+    OUTPUT:
+        RETVAL
+
+MODULE = Font::FreeType   PACKAGE = Font::FreeType::BoundingBox   PREFIX = qefft2_bb_
+
+FT_Pos
+qefft2_bb_x_min (Font_FreeType_BoundingBox bb)
+    CODE:
+        RETVAL = bb->xMin;
+    OUTPUT:
+        RETVAL
+
+FT_Pos
+qefft2_bb_y_min (Font_FreeType_BoundingBox bb)
+    CODE:
+        RETVAL = bb->yMin;
+    OUTPUT:
+        RETVAL
+
+FT_Pos
+qefft2_bb_x_max (Font_FreeType_BoundingBox bb)
+    CODE:
+        RETVAL = bb->xMax;
+    OUTPUT:
+        RETVAL
+
+FT_Pos
+qefft2_bb_y_max (Font_FreeType_BoundingBox bb)
+    CODE:
+        RETVAL = bb->yMax;
     OUTPUT:
         RETVAL
 

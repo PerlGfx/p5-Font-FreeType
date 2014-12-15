@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 77 + 5 * 2 + 256 * 2;
+use Test::More tests => 78 + 5 * 2 + 256 * 2;
 use File::Spec::Functions;
 use Font::FreeType;
 
@@ -98,6 +98,15 @@ subtest "named infos" => sub {
     is $copy_info->platform_id, 1;
     is $copy_info->name_id, 0;
     is $copy_info->encoding_id, 0;
+};
+
+subtest "bounding box" => sub {
+    my $bb = $vera->bounding_box;
+    ok $bb;
+    is $bb->x_min, -375, "x_min is correct";
+    is $bb->y_min, -483, "y_min is correct";
+    is $bb->x_max, 2636, "x_max is correct";
+    is $bb->y_max, 1901, "y_max is correct";
 };
 
 # Test iterating over all the characters.  256*2 tests.

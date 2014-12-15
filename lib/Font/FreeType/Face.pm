@@ -283,6 +283,10 @@ The current active L<charmap|Font::FreeType::CharMap> for this face.
 
 An array of the L<charmaps|Font::FreeType::CharMap> of the face.
 
+=item bounding_box()
+
+The outline's L<bounding box|Font::FreeType::BoundingBox> for this face.
+
 =back
 
 =head1 SEE ALSO

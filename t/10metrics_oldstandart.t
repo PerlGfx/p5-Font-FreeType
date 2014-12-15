@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 26;
+use Test::More tests => 27;
 use File::Spec::Functions;
 use Font::FreeType;
 
@@ -87,4 +87,13 @@ subtest "named infos" => sub {
     is $copy_info->platform_id, 1;
     is $copy_info->name_id, 0;
     is $copy_info->encoding_id, 0;
+};
+
+subtest "bounding box" => sub {
+    my $bb = $font->bounding_box;
+    ok $bb;
+    is $bb->x_min, -868, "x_min is correct";
+    is $bb->y_min, -294, "y_min is correct";
+    is $bb->x_max, 1930, "x_max is correct";
+    is $bb->y_max, 952,  "y_max is correct";
 };
