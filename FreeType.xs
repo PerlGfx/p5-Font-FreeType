@@ -192,7 +192,7 @@ make_glyph (SV *face_sv, FT_ULong char_code, FT_UInt index)
 {
     Font_FreeType_Glyph glyph;
     SV *sv;
-    New(0, glyph, 1, struct QefFT2_Glyph_);
+    Newx(glyph, 1, struct QefFT2_Glyph_);
 
     glyph->face_sv = face_sv;
     SvREFCNT_inc(face_sv);
@@ -403,7 +403,7 @@ qefft2_face (Font_FreeType library, const char *filename, int faceidx, FT_Int32 
                "opening font face");
         library_sv = SvRV(ST(0));
         SvREFCNT_inc(library_sv);
-        New(0, extra, 1, QefFT2_Face_Extra);
+        Newx(extra, 1, QefFT2_Face_Extra);
         extra->library_sv = library_sv;
         extra->loaded_glyph_idx = 0;
         extra->glyph_load_flags = glyph_load_flags;
@@ -747,7 +747,7 @@ qefft2_face_namedinfos (Font_FreeType_Face face)
             for(i = 0; i < count; i++) {
                 SV *sv = newSV(0);
                 FT_SfntName* sfnt;
-                New(0, sfnt, 1, FT_SfntName);
+                Newx(sfnt, 1, FT_SfntName);
                 errchk(FT_Get_Sfnt_Name(face, i, sfnt),
                        "loading sfnt structure");
                 sv_setref_pv(sv, "Font::FreeType::NamedInfo", (void *) sfnt);
@@ -917,7 +917,7 @@ qefft2_glyph_name (Font_FreeType_Glyph glyph)
                 /* The loop repeatedly expands the buffer if it looks like
                  * the glyph name might be longer than the space available.  */
                 bufsz = QEF_BUF_SZ;
-                New(0, buf, bufsz, char);
+                Newx(buf, bufsz, char);
                 while (1) {
                     errchk(FT_Get_Glyph_Name(face, glyph->index, buf, bufsz),
                            "getting freetype glyph name");
@@ -1128,7 +1128,7 @@ qefft2_glyph_bitmap (Font_FreeType_Glyph glyph, UV render_mode = FT_RENDER_MODE_
         rows = newAV();
         av_extend(rows, bitmap->rows - 1);
         buf = bitmap->buffer;
-        row_buf = New(0, row_buf, bitmap->width, unsigned char);
+        row_buf = Newx(row_buf, bitmap->width, unsigned char);
 
         if (bitmap->pixel_mode == FT_PIXEL_MODE_MONO) {
             for (i = 0; i < bitmap->rows; ++i) {
