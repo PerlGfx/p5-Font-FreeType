@@ -23,6 +23,18 @@ WriteMakefile(
     },
     LIBS               => "-l${lib}",
     INC                => $inc,
+    ( eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => 'perl') : ()),
+    ( eval { ExtUtils::MakeMaker->VERSION(6.46) } ?
+        (
+            META_MERGE => {
+                resources => {
+                    repository => 'https://github.com/zmughal/p5-Font-FreeType',
+                },
+            }
+        ) : ()
+    ),
+),
+
 );
 
 # Generate a listing of the characters in the BDF test font, for checking
