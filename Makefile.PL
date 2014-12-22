@@ -33,8 +33,7 @@ WriteMakefile(
             }
         ) : ()
     ),
-),
-
+    (eval { ExtUtils::MakeMaker->VERSION(6.46) } ? ( MIN_PERL_VERSION => '5.8.1') : ()),
 );
 
 # Generate a listing of the characters in the BDF test font, for checking
