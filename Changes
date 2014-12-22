@@ -1,3 +1,22 @@
+0.04_01 2014-12-21 dmol@cpan.org
+ - New BoundingBox class, which represents outline's bounding box for a
+   face (Ivan Baidakou, basiliscos).
+ - New NamedInfo class, which allows to access to information from 'names
+   table' in font file, e.g. get font copyrigh information (Ivan Baidakou,
+   basiliscos).
+ - New CharMap class, which allows to access to character map from font
+   typefaces (Ivan Baidakou, basiliscos).
+ - Improve module building, i.e. use Devel::CheckLib instead of pkg-config
+   invocation (Ivan Baidakou, basiliscos).
+ - Skip pgm-comparison tests as they are dependend on underlying FT2
+   library version (Ivan Baidakou, basiliscos).
+ - Retrieve more font face metrics: text_heigh, ascender and descender
+   (Ivan Baidakou, basiliscos).
+ - Update examples/font-info.pl which mimics more ftdump utility (Ivan
+   Baidakou, basiliscos).
+ - Apply patch to build (RT#64110) and fix compilation errors (RT#32713)
+   (Zakariyya Mughal).
+
 0.03 2004-09-11 qef@laxan.com
  - Now compiles with older versions of FreeType, at least back to 2.0.9.
    There are macro #if directives to conditionalize the code on the
