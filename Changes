@@ -1,3 +1,7 @@
+ - Update Changes.
+ - Add licence, min perl version and link to repository in Makefile.PL
+   (Ivan Baidakou, basiliscos).
+
 0.04_01 2014-12-21 dmol@cpan.org
  - New BoundingBox class, which represents outline's bounding box for a
    face (Ivan Baidakou, basiliscos).
