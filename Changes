@@ -1,3 +1,8 @@
+0.04_03 2014-12-22 dmol@cpan.org
+ - Simplify rendering tests t/30render.t, as there is false-negative
+   tests results (GH#17)
+
+0.04_02 2014-12-22 dmol@cpan.org
  - Update Changes.
  - Add licence, min perl version and link to repository in Makefile.PL
    (Ivan Baidakou, basiliscos).
