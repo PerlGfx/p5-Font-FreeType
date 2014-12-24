@@ -1,3 +1,6 @@
+0.04 2014-12-24 dmol@cpan.org
+ - No changes since v0.04_03
+
 0.04_03 2014-12-22 dmol@cpan.org
  - Simplify rendering tests t/30render.t, as there is false-negative
    tests results (GH#17)

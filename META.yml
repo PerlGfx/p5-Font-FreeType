@@ -22,4 +22,4 @@ requires:
   perl: '5.008001'
 resources:
   repository: https://github.com/zmughal/p5-Font-FreeType
-version: 0.04_03
+version: '0.04'
