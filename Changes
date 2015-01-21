@@ -1,3 +1,7 @@
+0.05_1 2015-01-21 dmol@cpan.org
+ - Avoid clang warning (RT#101653)
+ - Attempt to fix CT#939e0664-8c46-11e4-8147-dcee86cc0d3a
+
 0.04 2014-12-24 dmol@cpan.org
  - No changes since v0.04_03
 
