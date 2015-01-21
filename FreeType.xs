@@ -22,6 +22,7 @@ extern "C" {
 #include FT_GLYPH_H
 #include FT_OUTLINE_H
 #include FT_BBOX_H
+#include FT_TYPE1_TABLES_H
 
 #undef assert
 #include <assert.h>
