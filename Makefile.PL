@@ -15,12 +15,23 @@ WriteMakefile(
     NAME               => 'Font::FreeType',
     AUTHOR             => 'Geoff Richards <qef@laxan.com>',
     VERSION_FROM       => 'lib/Font/FreeType.pm',
-    CONFIGURE_REQUIRES => {
-        "Devel::CheckLib" => "0"
-    },
-    TEST_REQUIRES      => {
-        Test::Warnings => 0,
-    },
+    ( eval { ExtUtils::MakeMaker->VERSION(6.64) } ?
+        (
+            CONFIGURE_REQUIRES => {
+                "Devel::CheckLib"     => '0',
+                "ExtUtils::MakeMaker" => "6.64"
+            },
+            TEST_REQUIRES      => {
+                Test::Warnings => 0,
+            },
+        ) : (
+            PREREQ_PM => {
+                "Devel::CheckLib"     => '0',
+                "ExtUtils::MakeMaker" => '6.64',
+                Test::Warnings        => 0,
+            },
+        )
+    ),
     LIBS               => "-l${lib}",
     INC                => $inc,
     ( eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => 'perl') : ()),
