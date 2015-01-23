@@ -87,6 +87,3 @@
  * Figure out how to make the outline available even after the bitmap was
    first loaded, without the kludge of always loading the outline (which
    is probably inefficient).  See the comments in qefft2_glyph_bitmap().
-
- * In Makefile.PL try to run freetype-config, and if it works, use what it
-   tells us.  Otherwise fall back to a sensible default.
