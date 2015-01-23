@@ -63,7 +63,8 @@ WriteMakefile(
         (
             CONFIGURE_REQUIRES => {
                 "Devel::CheckLib"     => '0',
-                "ExtUtils::MakeMaker" => "6.64"
+                "ExtUtils::MakeMaker" => "6.64",
+                "File::Which"         => '0',
             },
             TEST_REQUIRES      => {
                 Test::Warnings => 0,
