@@ -1,3 +1,6 @@
+ - Get build options from freetype-config if it exists (Zakariyya Mughal)
+   (RT#101654)
+
 0.05_1 2015-01-21 dmol@cpan.org
  - Avoid clang warning (RT#101653)
  - Attempt to fix CT#939e0664-8c46-11e4-8147-dcee86cc0d3a
