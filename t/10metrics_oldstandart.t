@@ -54,7 +54,8 @@ foreach my $method (sort keys %expected_flags) {
 # Some other general properties.
 is($font->number_of_glyphs, 1658, '$face->number_of_glyphs() is right');
 is($font->units_per_em, 1000, '$face->units_per_em() is right');
-is($font->underline_position, -198, 'underline position');
+my $underline_position = $font->underline_position;
+ok $underline_position <= -178 || $underline_position >= -198, 'underline position';
 is($font->underline_thickness, 40, 'underline thickness');
 is($font->height, 1482, 'text height');
 is($font->ascender, 952, 'ascender');
