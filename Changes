@@ -1,7 +1,8 @@
-- Be more tolerant in test for checking underline position
-  (CT#9d93130c-a254-11e4-9a11-67e5227a829d) (Ivan Baidakou, basiliscos).
-- Get build options from freetype-config if it exists (RT#101654)
-  (Zakariyya Mughal).
+0.05_2 2015-01-23 dmol@cpan.org
+ - Be more tolerant in test for checking underline position
+   (CT#9d93130c-a254-11e4-9a11-67e5227a829d) (Ivan Baidakou, basiliscos).
+ - Get build options from freetype-config if it exists (RT#101654)
+   (Zakariyya Mughal).
 
 0.05_1 2015-01-21 dmol@cpan.org
  - Avoid clang warning (RT#101653).

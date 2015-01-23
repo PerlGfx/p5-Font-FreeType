@@ -7,8 +7,8 @@ build_requires:
   Test::Warnings: '0'
 configure_requires:
   Devel::CheckLib: '0'
-  File::Which: '0'
   ExtUtils::MakeMaker: '6.64'
+  File::Which: '0'
 dynamic_config: 1
 generated_by: 'ExtUtils::MakeMaker version 7.04, CPAN::Meta::Converter version 2.143240'
 license: perl
@@ -24,4 +24,4 @@ requires:
   perl: '5.008001'
 resources:
   repository: https://github.com/zmughal/p5-Font-FreeType
-version: 0.05_01
+version: 0.05_02
