@@ -1,14 +1,58 @@
 use Devel::CheckLib;
 use ExtUtils::MakeMaker;
 use File::Spec::Functions;
+use File::Which;
 
-my $inc = '-I/usr/include/freetype2';
-my $lib = 'freetype';
+my %header_config = ( header => 'ft2build.h', );
 
+my $config; # store various configurations to check
+
+# use the pkg-config wrapper for FreeType
+if( which('freetype-config') ) {
+    chomp($config->{ft_config}{LIBS} = `freetype-config --libs`);
+    chomp($config->{ft_config}{INC}  = `freetype-config --cflags`);
+}
+
+# default configuration
+$config->{default}{lib} = 'freetype';
+$config->{default}{INC} = '-I/usr/include/freetype2';
+
+# try each configuration
+my $working_config_name = undef;
+for my $config_name (qw(ft_config)) {
+    my %checklib_config = (
+            %{ $config->{$config_name} },
+            %header_config,
+    );
+
+    # test the configuration
+    if( check_lib( %checklib_config ) ) {
+        $working_config_name = $config_name;
+    }
+}
+
+# if none of the tried configurations work, use the default
+$working_config_name = 'default' if not defined $working_config_name;
+
+my $working_config = $config->{$working_config_name};
+if( !exists $working_config->{LIBS} && exists $working_config->{lib} ) {
+    $working_config->{LIBS} = "-l$working_config->{lib}";
+}
+
+# MakeMaker build flags
+my %MakeMakerFlags = (
+    LIBS => $working_config->{LIBS},
+    INC  => $working_config->{INC},
+);
+
+print STDERR "Build config: $working_config_name\n";
+print STDERR "Build flag LIB: $MakeMakerFlags{LIBS}\n";
+print STDERR "Build flag INC: $MakeMakerFlags{INC}\n";
+
+# finally use check_lib_or_exit so that it gives appropriate warnings to the user
 check_lib_or_exit(
-    lib    => $lib,
-    INC    => $inc,
-    header => 'ft2build.h',
+    %MakeMakerFlags,
+    %header_config,
 );
 
 WriteMakefile(
@@ -27,13 +71,13 @@ WriteMakefile(
         ) : (
             PREREQ_PM => {
                 "Devel::CheckLib"     => '0',
+                "File::Which"         => '0',
                 "ExtUtils::MakeMaker" => '6.64',
                 Test::Warnings        => 0,
             },
         )
     ),
-    LIBS               => "-l${lib}",
-    INC                => $inc,
+    %MakeMakerFlags, # set LIB/INC from working configuration
     ( eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => 'perl') : ()),
     ( eval { ExtUtils::MakeMaker->VERSION(6.46) } ?
         (
