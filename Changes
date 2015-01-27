@@ -1,3 +1,6 @@
+0.05  2015-01-27 dmol@cpan.org
+ - No changes since 0.05_02
+
 0.05_2 2015-01-23 dmol@cpan.org
  - Be more tolerant in test for checking underline position
    (CT#9d93130c-a254-11e4-9a11-67e5227a829d) (Ivan Baidakou, basiliscos).
