@@ -7,7 +7,9 @@
 
 use strict;
 use warnings;
-use Test::More tests => 78 + 5 * 2 + 256 * 2;
+use utf8;
+
+use Test::More tests => 78 + 5 * 2 + 256 * 2 + 5;
 use File::Spec::Functions;
 use Font::FreeType;
 
@@ -191,5 +193,15 @@ foreach my $pair (sort keys %kerning) {
 my $kern_x = $vera->kerning(
     map { $vera->glyph_from_char($_)->index } 'A', 'V');
 is($kern_x, -131, "horizontal kerning of 'AV' in scalar context");
+
+my $missing_glyph = $vera->glyph_from_char('˗');
+is $missing_glyph, undef, "no fallback glyph";
+
+$missing_glyph = $vera->glyph_from_char('˗', 1);
+isnt $missing_glyph, undef, "fallback glyph is defined";
+is $missing_glyph->horizontal_advance, 1229, "missing glyph has horizontal advance";
+
+is $vera->glyph_from_char_code(ord '˗', 0), undef, "no fallback glyph";
+isnt $vera->glyph_from_char_code(ord '˗', 1), undef, "missing glyph is defined";
 
 # vim:ft=perl ts=4 sw=4 expandtab:

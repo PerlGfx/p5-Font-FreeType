@@ -778,12 +778,12 @@ qefft2_face_kerning (Font_FreeType_Face face, FT_UInt left_glyph_idx, FT_UInt ri
 
 
 SV *
-qefft2_face_glyph_from_char_code (Font_FreeType_Face face, FT_ULong char_code)
+qefft2_face_glyph_from_char_code (Font_FreeType_Face face, FT_ULong char_code, int fallback = 0)
     PREINIT:
         FT_UInt glyph_idx;
     CODE:
         glyph_idx = FT_Get_Char_Index(face, char_code);
-        if (glyph_idx)
+        if (glyph_idx || fallback)
             RETVAL = make_glyph(SvRV(ST(0)), char_code, glyph_idx);
         else
             RETVAL = &PL_sv_undef;
@@ -792,7 +792,7 @@ qefft2_face_glyph_from_char_code (Font_FreeType_Face face, FT_ULong char_code)
 
 
 SV *
-qefft2_face_glyph_from_char (Font_FreeType_Face face, SV *sv)
+qefft2_face_glyph_from_char (Font_FreeType_Face face, SV *sv, int fallback = 0)
     PREINIT:
         FT_UInt glyph_idx;
         const char *str;
@@ -806,7 +806,8 @@ qefft2_face_glyph_from_char (Font_FreeType_Face face, SV *sv)
             croak("string has no characters");
         char_code = *str;
         glyph_idx = FT_Get_Char_Index(face, char_code);
-        if (glyph_idx)
+        fallback = SvOK(ST(2)) ? SvIV(ST(2)) : 0;
+        if (glyph_idx || fallback)
             RETVAL = make_glyph(SvRV(ST(0)), char_code, glyph_idx);
         else
             RETVAL = &PL_sv_undef;
