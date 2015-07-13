@@ -106,7 +106,7 @@ L<Font::FreeType::Glyph|Font::FreeType::Glyph> object for the current glyph.
 For an example see the program I<list-characters.pl> provided in the
 distribution.
 
-=item glyph_from_char(I<character>)
+=item glyph_from_char(I<character>, I<fallback = 0>)
 
 Returns a L<Font::FreeType::Glyph|Font::FreeType::Glyph> object for the
 glyph corresponding to the first character in the string provided.
@@ -114,15 +114,19 @@ Note that currently non-ASCII characters are not likely to work with
 this, so you might be better using the C<glyph_from_char_code()>
 method below and the Perl C<ord> function.
 
-Returns I<undef> if the glyph is not available in the font.
+Returns I<undef> if the glyph is not available in the font and
+I<fallback> isn't defined; otherwise, i.e. if I<fallback = true>
+returns fonts I<missing glyph>.
 
-=item glyph_from_char_code(I<char-code>)
+=item glyph_from_char_code(I<char-code>, I<fallback = 0>)
 
 Returns a L<Font::FreeType::Glyph|Font::FreeType::Glyph> object for the
 glyph corresponding to Unicode character I<char-code>.  FreeType supports
 using other character sets, but this module doesn't yet.
 
-Returns I<undef> if the glyph is not available in the font.
+Returns I<undef> if the glyph is not available in the font and
+I<fallback> isn't defined; otherwise, i.e. if I<fallback = true>
+returns fonts I<missing glyph>.
 
 =item has_glyph_names()
 
