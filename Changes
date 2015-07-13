@@ -1,3 +1,6 @@
+0.06_1 2015-01-27 dmol@cpan.org
+ - Allow optionally fallback to missing glyph
+
 0.05  2015-01-27 dmol@cpan.org
  - No changes since 0.05_02
 
