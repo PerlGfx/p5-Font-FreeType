@@ -795,16 +795,24 @@ SV *
 qefft2_face_glyph_from_char (Font_FreeType_Face face, SV *sv, int fallback = 0)
     PREINIT:
         FT_UInt glyph_idx;
-        const char *str;
+        const U8 *str;
         STRLEN len;
-        unsigned long char_code;
+        UV char_code;
     CODE:
         if (!SvPOK(sv))
             croak("argument must be a string containing a character");
-        str = SvPV(sv, len);
+        str = (const U8*)SvPV(sv, len);
         if (!len)
             croak("string has no characters");
-        char_code = *str;
+        if (!UTF8_IS_INVARIANT(*str)) {
+            STRLEN s_len;
+            char_code = utf8_to_uvchr_buf(str, str + len, &s_len);
+            if (len != s_len) {
+                croak("malformed string (looks as UTF-8, but isn't it)");
+            }
+        } else {
+            char_code = *str;
+        }
         glyph_idx = FT_Get_Char_Index(face, char_code);
         fallback = SvOK(ST(2)) ? SvIV(ST(2)) : 0;
         if (glyph_idx || fallback)
