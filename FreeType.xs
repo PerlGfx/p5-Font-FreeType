@@ -27,6 +27,15 @@ extern "C" {
 #undef assert
 #include <assert.h>
 
+/* utf8_to_uvchr is deprecated in 5.16, but
+ * utf8_to_uvchr_buf is not available before 5.16
+ * If I need to get fancier, I should look at Dumper.xs
+ * in Data::Dumper
+ */
+#if PERL_VERSION <= 15 && ! defined(utf8_to_uvchr_buf)
+#define utf8_to_uvchr_buf(s, send, p_length) (utf8_to_uvchr(s, p_length))
+#endif
+
 /* Macro for testing whether we have at least a certain version of
  * Freetype available.  */
 #define QEFFT2_FT_AT_LEAST(major, minor, patch) \
