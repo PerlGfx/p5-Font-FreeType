@@ -1,3 +1,6 @@
+0.07_2 2015-09-24 dmol@cpan.org
+ - Try to support utf8_to_uvchr_buf for older perls
+
 0.07_1 2015-09-24 dmol@cpan.org
  - Fix UTF-8 string usage on non-intel architectures (GH#17)
 
