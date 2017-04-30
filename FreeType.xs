@@ -627,7 +627,7 @@ qefft2_face_fixed_sizes (Font_FreeType_Face face)
         int i;
         FT_Bitmap_Size *size;
         HV *hash;
-        double pt, ppem;
+        double pt = 0.0, ppem;
     PPCODE:
         if (GIMME_V != G_ARRAY) {
             PUSHs(sv_2mortal(newSViv((int) face->num_fixed_sizes)));
