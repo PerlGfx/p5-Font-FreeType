@@ -1147,7 +1147,7 @@ qefft2_glyph_bitmap (Font_FreeType_Glyph glyph, UV render_mode = FT_RENDER_MODE_
         rows = newAV();
         av_extend(rows, bitmap->rows - 1);
         buf = bitmap->buffer;
-        row_buf = Newx(row_buf, bitmap->width, unsigned char);
+        Newx(row_buf, bitmap->width, unsigned char);
 
         if (bitmap->pixel_mode == FT_PIXEL_MODE_MONO) {
             for (i = 0; i < bitmap->rows; ++i) {
