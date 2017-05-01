@@ -366,7 +366,7 @@ qefft2_import (const char *target_pkg)
 
 
 Font_FreeType
-qefft2_library_new (const char *class)
+qefft2_library_new (void)
     CODE:
         errchk(FT_Init_FreeType(&RETVAL),
                "opening freetype library");
