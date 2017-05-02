@@ -1,7 +1,8 @@
-- 2017-05-02 htl10@users.sourceforge.net
- - Added .gitignore file
- - Remove generated files from MANIFEST listing
+0.08_1 2015-05-92 dmol@cpan.org
+ - Added .gitignore file (htl10@users.sourceforge.net)
+ - Remove generated files from MANIFEST listing (htl10@users.sourceforge.net)
  - Removed unused variables and silenced some compiler warnings
+   (htl10@users.sourceforge.net)
 
 0.07 2015-09-27 dmol@cpan.org
  - No changes since 0.07_2
