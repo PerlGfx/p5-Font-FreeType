@@ -1,3 +1,8 @@
+- 2017-05-02 htl10@users.sourceforge.net
+ - Added .gitignore file
+ - Remove generated files from MANIFEST listing
+ - Removed unused variables and silenced some compiler warnings
+
 0.07 2015-09-27 dmol@cpan.org
  - No changes since 0.07_2
 
