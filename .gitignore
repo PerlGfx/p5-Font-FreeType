@@ -1,0 +1,10 @@
+blib/
+FreeType.bs
+FreeType.c
+*.o
+MYMETA.json
+MYMETA.yml
+Makefile
+Makefile.old
+pm_to_blib
+t/data/bdf_glyphs.txt
