@@ -418,6 +418,17 @@ qefft2_face (Font_FreeType library, const char *filename, int faceidx, FT_Int32 
         extra->glyph_load_flags = glyph_load_flags;
         extra->glyph_ft = 0;
         RETVAL->generic.data = (void *) extra;
+        /*
+        set active charmap if we don't have one;  caused by regression:
+        https://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=79e3789f81e14266578e71196ce71ecf5381d142
+        http://lists.nongnu.org/archive/html/freetype/2017-10/msg00006.html
+        */
+#if (QEFFT2_FT_AT_LEAST(2,8,1))
+        if (!RETVAL->charmap && RETVAL->num_charmaps) {
+            RETVAL->charmap = RETVAL->charmaps[0];
+        }
+#endif
+
     OUTPUT:
         RETVAL
 
