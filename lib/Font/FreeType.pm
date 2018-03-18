@@ -2,7 +2,7 @@ package Font::FreeType;
 use warnings;
 use strict;
 
-our $VERSION = '0.010_1';
+our $VERSION = '0.010';
 
 require DynaLoader;
 our @ISA = qw( DynaLoader );
