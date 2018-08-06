@@ -904,6 +904,28 @@ qefft2_face_foreach_char (Font_FreeType_Face face, SV *code)
         }
 
 
+void
+qefft2_face_foreach_glyph (Font_FreeType_Face face, SV *code)
+    PREINIT:
+        FT_UInt glyph_idx;
+    CODE:
+        for (glyph_idx  = 0 ; glyph_idx < face->num_glyphs ; glyph_idx++) {
+            dSP;
+            ENTER;
+            SAVETMPS;
+
+            PUSHMARK(SP);
+            SAVESPTR(DEFSV);
+            DEFSV = sv_2mortal(make_glyph(SvRV(ST(0)), 0, 0, glyph_idx));
+            PUTBACK;
+
+            call_sv(code, G_VOID | G_DISCARD);
+
+            FREETMPS;
+            LEAVE;
+        }
+
+
 MODULE = Font::FreeType   PACKAGE = Font::FreeType::Glyph   PREFIX = qefft2_glyph_
 
 
