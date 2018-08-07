@@ -140,6 +140,16 @@ module and so will be available once you do C<use Font::FreeType>.
 
 The same as doing nothing special.
 
+=item FT_LOAD_COMPUTE_METRICS
+
+Compute glyph metrics from the glyph data, without
+the use of bundled metrics tables (for example, the 'hdmx' table in
+TrueType fonts).  This flag is mainly used by font validating or
+font editing applications, which need to ignore, verify, or edit
+those tables.
+
+This option is only available with FreeType 2.6.1 or newer.
+
 =item FT_LOAD_CROP_BITMAP
 
 Remove extraneous black bits round the edges of bitmaps when loading
