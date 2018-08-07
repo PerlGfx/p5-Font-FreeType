@@ -1093,6 +1093,15 @@ qefft2_glyph_vertical_advance (Font_FreeType_Glyph glyph)
         RETVAL
 
 
+void
+qefft2_glyph_load (Font_FreeType_Glyph glyph)
+    PREINIT:
+        FT_Face face;
+    CODE:
+        face = (FT_Face) SvIV(glyph->face_sv);
+        ensure_glyph_loaded(face, glyph);
+
+
 bool
 qefft2_glyph_has_outline (Font_FreeType_Glyph glyph)
     PREINIT:
