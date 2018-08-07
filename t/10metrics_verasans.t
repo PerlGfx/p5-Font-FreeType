@@ -126,16 +126,16 @@ subtest "bounding box" => sub {
 # don't have corresponding Unicode characters and for some reason aren't
 # reported by this, and another 2 which have Unicode characters but no glyphs.
 # The expected Unicode codes and names of the glyphs are in a text file.
-# TODO - how can we iterate over the whole lot?
-my $glyph_list_filename = catfile($data_dir, 'vera_characters.txt');
-open my $glyph_list, '<', $glyph_list_filename
+
+my $character_list_filename = catfile($data_dir, 'vera_characters.txt');
+open my $character_list, '<', $character_list_filename
   or die "error opening file for list of glyphs: $!";
 
 BEGIN { $Tests += 256*2 + 1 }
 $vera->foreach_char(sub {
     die "shouldn't be any arguments passed in" unless @_ == 0;
-    my $line = <$glyph_list>;
-    die "not enough characters in listing file '$glyph_list_filename'"
+    my $line = <$character_list>;
+    die "not enough characters in listing file '$character_list_filename'"
       unless defined $line;
     chomp $line;
     my ($unicode, $name) = split ' ', $line;
