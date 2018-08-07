@@ -133,7 +133,7 @@ open my $glyph_list, '<', $glyph_list_filename
 
 BEGIN { $Tests += 256*2 + 1 }
 $vera->foreach_char(sub {
-    die "shouldn't be any argumetns passed in" unless @_ == 0;
+    die "shouldn't be any arguments passed in" unless @_ == 0;
     my $line = <$glyph_list>;
     die "not enough characters in listing file '$glyph_list_filename'"
       unless defined $line;
