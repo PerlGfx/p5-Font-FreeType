@@ -144,6 +144,27 @@ $vera->foreach_char(sub {
        "glyph $unicode char code in foreach_char()");
     is($_->name, $name, "glyph $unicode name in foreach_char()");
 });
+is(scalar <$character_list>, undef, "we aren't missing any glyphs");
+
+# Test iterating over all the glyphs.  268*3 tests.
+
+my $glyph_list_filename = catfile($data_dir, 'vera_glyphs.txt');
+open my $glyph_list, '<', $glyph_list_filename
+  or die "error opening file for list of glyphs: $!";
+
+BEGIN { $Tests += 268*3 + 1 }
+$vera->foreach_glyph(sub {
+    die "shouldn't be any arguments passed in" unless @_ == 0;
+    my $line = <$glyph_list>;
+    die "not enough characters in listing file '$glyph_list_filename'"
+      unless defined $line;
+    chomp $line;
+    my ($index, $unicode, $name) = split ' ', $line;
+    is($_->index, $index, "glyph $index index in foreach_glyph()");
+    is($_->char_code || "0", $unicode,
+       "glyph $index char code in foreach_glyph()");
+    is($_->name, $name, "glyph $index name in foreach_glyph()");
+});
 is(scalar <$glyph_list>, undef, "we aren't missing any glyphs");
 
 # Test metrics on some particlar glyphs.
