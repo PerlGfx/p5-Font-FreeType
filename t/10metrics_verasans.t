@@ -127,7 +127,7 @@ subtest "bounding box" => sub {
 # reported by this, and another 2 which have Unicode characters but no glyphs.
 # The expected Unicode codes and names of the glyphs are in a text file.
 # TODO - how can we iterate over the whole lot?
-my $glyph_list_filename = catfile($data_dir, 'vera_glyphs.txt');
+my $glyph_list_filename = catfile($data_dir, 'vera_characters.txt');
 open my $glyph_list, '<', $glyph_list_filename
   or die "error opening file for list of glyphs: $!";
 
