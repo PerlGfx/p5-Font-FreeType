@@ -13,7 +13,7 @@
  - Fallback to default charmap for 2.8.1 for backward-compatibility
    for FNT-fonts
 
-0.08_1 2015-05-02 dmol@cpan.org
+0.08_1 2017-05-02 dmol@cpan.org
  - Added .gitignore file (htl10@users.sourceforge.net)
  - Remove generated files from MANIFEST listing (htl10@users.sourceforge.net)
  - Removed unused variables and silenced some compiler warnings
