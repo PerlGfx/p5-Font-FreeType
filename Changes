@@ -1,4 +1,7 @@
-0.11 2018-08-01 dmol@cpan.org
+0.12 2018-08-12 dmol@cpan.org
+ - Fix MANIFEST
+
+0.11 2018-08-11 dmol@cpan.org
  - Added FT_LOAD_COMPUTE_METRICS load flag (HinTak)
  - Added face->foreach_glyph method for iterating over all glyphs
    (some of them don't necessarily have a unicode point) (HinTak)
