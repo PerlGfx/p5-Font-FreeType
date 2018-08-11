@@ -1,3 +1,8 @@
+0.10_1 2018-08-07 htl10@users.sourceforge.net
+ - Added FT_LOAD_COMPUTE_METRICS load flag
+ - Added face->foreach_glyph method for iterating over all glyphs
+   (some of them don't necessarily have a unicode point)
+
 0.10_1 2018-03-18 dmol@cpan.org
  - No changes since 0.10_1
 
@@ -8,7 +13,7 @@
  - Fallback to default charmap for 2.8.1 for backward-compatibility
    for FNT-fonts
 
-0.08_1 2015-05-02 dmol@cpan.org
+0.08_1 2017-05-02 dmol@cpan.org
  - Added .gitignore file (htl10@users.sourceforge.net)
  - Remove generated files from MANIFEST listing (htl10@users.sourceforge.net)
  - Removed unused variables and silenced some compiler warnings
