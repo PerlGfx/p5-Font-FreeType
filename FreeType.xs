@@ -444,6 +444,22 @@ qefft2_face (Font_FreeType library, const char *filename, int faceidx, FT_Int32 
 MODULE = Font::FreeType   PACKAGE = Font::FreeType::Face   PREFIX = qefft2_face_
 
 
+FT_Int32
+qefft2_face_load_flags (Font_FreeType_Face face, FT_Int32 val = NO_INIT )
+    PREINIT:
+        QefFT2_Face_Extra *extra;
+    CODE:
+        extra = face->generic.data;
+        if( items > 1 )
+        {
+            extra->slot_valid = false;
+            extra->glyph_load_flags = val;
+        }
+        RETVAL = extra->glyph_load_flags;
+    OUTPUT:
+        RETVAL
+
+
 void
 qefft2_face_DESTROY (Font_FreeType_Face face)
     PREINIT:
