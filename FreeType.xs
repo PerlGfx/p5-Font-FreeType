@@ -871,7 +871,7 @@ qefft2_face_glyph_from_name (Font_FreeType_Face face, SV *sv, int fallback = 0)
     CODE:
         name = SvPV_nolen(sv);
         ix = FT_Get_Name_Index(face, name);
-        if (ix || fallback)
+        if (ix || fallback || !strcmp(name, ".notdef"))
             RETVAL = make_glyph(SvRV(ST(0)), 0, 0, ix);
         else
             RETVAL = &PL_sv_undef;
