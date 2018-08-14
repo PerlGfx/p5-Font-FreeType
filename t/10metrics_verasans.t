@@ -261,6 +261,15 @@ foreach my $get_by (qw/index name/) {
            "width of glyph '$_->{index}', by $get_by");
     }
 }
+BEGIN { $Tests += 3 }
+is($vera->load_flags, FT_LOAD_DEFAULT, "FT_LOAD_DEFAULT");
+is($vera->load_flags(FT_LOAD_COMPUTE_METRICS), FT_LOAD_COMPUTE_METRICS, "FT_LOAD_COMPUTE_METRICS");
+is($vera->load_flags, FT_LOAD_COMPUTE_METRICS, "FT_LOAD_COMPUTE_METRICS");
+
+BEGIN { $Tests += 268 }
+$vera->foreach_glyph(sub {
+ok defined eval {$_->load(); $_->name; }
+;});
 
 BEGIN { $Tests += 5 }
 for (@glyph_metrics) {
