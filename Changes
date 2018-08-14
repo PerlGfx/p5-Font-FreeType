@@ -1,3 +1,7 @@
+0.12 2018-08-14 htl10@users.sourceforge.net
+ - Added the face->load_flags getter and setter methods
+ - Fixed bugs loading glyph index 0 by name (".notdef") or by index.
+
 0.12 2018-08-11 htl10@users.sourceforge.net
  - Added an explicit glyph->load method
 
