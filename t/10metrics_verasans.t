@@ -219,6 +219,49 @@ foreach my $get_by (qw/char code index name/) {
     }
 }
 
+# The 12 glyphs which don't have char code.
+my @glyph_metrics_nochar = (
+    { name => '.notdef', index => 0, advance => 1229, LBearing => 102, RBearing => 103 },
+    { name => '.null', index => 1, advance => 0, LBearing => 0, RBearing => 0 },
+    { name => 'nonmarkingreturn', index => 2, advance => 651, LBearing => 0, RBearing => 651 },
+    { name => 'c6459', index => 259, advance => 1024, LBearing => 215, RBearing => 215 },
+    { name => 'c6460', index => 260, advance => 1024, LBearing => 371, RBearing => 272 },
+    { name => 'c6461', index => 261, advance => 1024, LBearing => 182, RBearing => 182 },
+    { name => 'c6462', index => 262, advance => 1024, LBearing => 268, RBearing => 373 },
+    { name => 'c6463', index => 263, advance => 1024, LBearing => 207, RBearing => 207 },
+    { name => 'c6466', index => 264, advance => 1024, LBearing => 207, RBearing => 207 },
+    { name => 'c6467', index => 265, advance => 821, LBearing => 63, RBearing => 65 },
+    { name => 'c6468', index => 266, advance => 1024, LBearing => 199, RBearing => 199 },
+    { name => 'c6469', index => 267, advance => 1024, LBearing => 410, RBearing => 410 },
+);
+
+BEGIN { $Tests += 12*2*7 }
+foreach my $get_by (qw/index name/) {
+    foreach (@glyph_metrics_nochar) {
+        my $glyph;
+        if ($get_by eq "index") {
+            $glyph = $vera->glyph_from_index($_->{index});
+        }
+        elsif ($get_by eq "name") {
+            $glyph = $vera->glyph_from_name($_->{name});
+        }
+        is($glyph->name, $_->{name},
+           "name of glyph '$_->{index}', by $get_by");
+        is($glyph->index, $_->{index},
+            "index of glyph '$_->{index}', by $get_by");
+        is($glyph->char_code, undef,
+            "char code of glyph '$_->{index}', by $get_by");
+        is($glyph->horizontal_advance, $_->{advance},
+           "advance width of glyph '$_->{index}', by $get_by");
+        is($glyph->left_bearing, $_->{LBearing},
+           "left bearing of glyph '$_->{index}', by $get_by");
+        is($glyph->right_bearing, $_->{RBearing},
+           "right bearing of glyph '$_->{index}', by $get_by");
+        is($glyph->width, $_->{advance} - $_->{LBearing} - $_->{RBearing},
+           "width of glyph '$_->{index}', by $get_by");
+    }
+}
+
 BEGIN { $Tests += 5 }
 for (@glyph_metrics) {
     my $ix = $vera->get_name_index($_->{name});
