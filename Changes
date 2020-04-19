@@ -1,3 +1,6 @@
+0.13 2018-10-19 dmol@cpan.org
+ - update tests, as freetype changed font metrices under hood
+
 0.12 2018-08-14 htl10@users.sourceforge.net
  - Added the face->load_flags getter and setter methods
  - Fixed bugs loading glyph index 0 by name (".notdef") or by index.
